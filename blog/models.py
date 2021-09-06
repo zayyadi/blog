@@ -55,7 +55,10 @@ class Article(models.Model):
     def get_absolute_url(self):
         from django.urls import reverse
 
-        return reverse("article-post", kwargs={"pk": str(self.id)})
+        return reverse("blog:detail",args=[self.slug])
+
+    def get_comments(self):
+        return self.comments.filter(parent=None).filter(active=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -70,9 +73,15 @@ class Comment(models.Model):
     body = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=False)
+    email = models.EmailField()
+    parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['created_on']
+    
+    def get_comments(self):
+        return Comment.objects.filter(parent=self).filter(active=True)
 
     def __str__(self):
         return f"Comment {self.body} by {self.author}"

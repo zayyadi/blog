@@ -4,6 +4,7 @@
 {% block body %}
 {% load crispy_forms_tags %}
 {% if user.is_authenticated %}
+{% if user.is_admin %}
 
 <div class="row">
     <div class="col-md-6 offset-md-3">

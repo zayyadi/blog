@@ -33,7 +33,7 @@ SECRET_KEY = 'wt&d2y)^fpwkhhvzdxtostzyz+qm#xbsj=6==m2k9uv2eep2je'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['75e8de10585d.ngrok.io', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['75e8de10585d.ngrok.io', '127.0.0.1', 'localhost',]
 
 
 # Application definition
@@ -57,8 +57,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     'django_extensions',
     'webpush',
-    'cloudinary',
-    'cloudinary_storage',
 ]
 
 INSTALLED_APPS += ('django_summernote', )
@@ -184,14 +182,6 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': env('CLOUD_NAME'),
-    'API_KEY': env('API_KEY'),
-    'API_SECRET': env('API_SECRET'),
-}
-
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
