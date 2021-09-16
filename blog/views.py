@@ -24,9 +24,6 @@ def CategoryView(request, category):
     return render(request, 'categories.html', {'category':category, 'category_post':category_post})
 
 def articles(request, slug=None, tag_slug=None):
-    query = request.GET.get("q")
-    if query:
-        articles=Article.objects.filter(Q(title__icontains=query) | Q(tags__name__icontains=query)).distinct()
     articles = Article.objects.all()
     paginator = Paginator(articles, 5)
     page = request.GET.get('page')
@@ -37,9 +34,14 @@ def articles(request, slug=None, tag_slug=None):
         articles = paginator.page(1)
     except EmptyPage:
         articles = paginator.page(paginator.num_pages)
+
     if tag_slug:
         tag= get_object_or_404(Tag, slug=tag_slug)
         articles = Article.objects.filter(tags__in=[tag])
+
+    query = request.GET.get("q")
+    if query:
+        articles=Article.objects.filter(Q(title__icontains=query) | Q(tags__name__icontains=query)).distinct()
 
     context = {
         "articles": articles,

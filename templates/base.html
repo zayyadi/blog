@@ -67,7 +67,8 @@
 
 {% include 'navbar.html' %}   
 <form class="d-flex" action="/">
-          <input class="form-control mr-0" type="search" value="{{request.GET.q}}" name="q" placeholder="Search" aria-label="Search">
+  <input class="form-control mr-0" type="search" value="{{request.GET.q}}" name="q" placeholder="Search" aria-label="Search">
+  <button type="submit" class="btn btn-primary btn-sm">Submit</button>
 </form>
 <main class="container my-3">
         
@@ -76,10 +77,6 @@
       Search Results for "{{ request.GET.q }}"
     {% endif %}
   </h2>
-
-  {% block content %}
-
-  {% endblock content %}
 </main>
 <body class="w3-light-grey">  
     <div style = "margin-top : 100px; margin-bottom:100px;" class = "container">
