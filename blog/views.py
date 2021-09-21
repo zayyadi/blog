@@ -60,7 +60,7 @@ def LikeView(request, slug):
 def about(request):
     return render(request,"about.html")
 
-@login_required(login_url = "accounts:login")
+@login_required(login_url = "login")
 def dashboard(request):
     articles = Article.objects.filter(author = request.user)
     context = {
@@ -69,7 +69,7 @@ def dashboard(request):
     return render(request,"dashboard.html",context)
 
 
-@login_required(login_url = "allauth:account_login")
+@login_required(login_url = "login")
 def addArticle(request):
     form = ArticleForm(request.POST or None,request.FILES or None)
     common_tags = Article.tags.most_common()[:4]
@@ -125,7 +125,7 @@ def detail(request,post):
     return render(request,"detail.html",context)
 
 
-@login_required(login_url = "allauth:account_login")
+@login_required(login_url = "login")
 def updateArticle(request, slug):
 
     article = get_object_or_404(Article, slug=slug)
@@ -141,7 +141,7 @@ def updateArticle(request, slug):
     return render(request,"update.html",{"form":form})
 
 
-@login_required(login_url = "allauth:account_login")
+@login_required(login_url = "login")
 def deleteArticle(request,slug):
     article = get_object_or_404(Article,slug=slug)
 
