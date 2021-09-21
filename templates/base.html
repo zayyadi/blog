@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load social_share %}
 <!DOCTYPE html>
 
 <html lang="en">
@@ -20,55 +20,10 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/monokai-sublime.min.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
-  <style type="text/css">
-    html,
-    body,
-    header,
-    .carousel {
-      height: 60vh;
-    }
-
-    @media (max-width: 740px) {
-
-      html,
-      body,
-      header,
-      .carousel {
-        height: 100vh;
-      }
-    }
-
-    @media (min-width: 800px) and (max-width: 850px) {
-
-      html,
-      body,
-      header,
-      .carousel {
-        height: 100vh;
-      }
-    }
-    .bd-placeholder-img {
-      font-size: 1.125rem;
-      text-anchor: middle;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
-
-    @media (min-width: 768px) {
-      .bd-placeholder-img-lg {
-        font-size: 3.5rem;
-      }
-      
-    }
-  </style>
 </head>
 
-{% include 'navbar.html' %}   
-<form class="d-flex" action="/">
-          <input class="form-control mr-0" type="search" value="{{request.GET.q}}" name="q" placeholder="Search" aria-label="Search">
-</form>
+{% include 'navbar.html' %} 
+<br /><br />
 <main class="container my-3">
         
   <h2 class="my-3">
@@ -76,10 +31,6 @@
       Search Results for "{{ request.GET.q }}"
     {% endif %}
   </h2>
-
-  {% block content %}
-
-  {% endblock content %}
 </main>
 <body class="w3-light-grey">  
     <div style = "margin-top : 100px; margin-bottom:100px;" class = "container">
@@ -112,6 +63,27 @@
 
     {% block extra_scripts %}
     {% endblock extra_scripts %}
+    <hr class="m-0" />
+
+    <div class="text-center py-4 align-items-center">
+      <p>Follow MDB on social media</p>
+      <a href="https://www.youtube.com/" class="btn btn-primary m-1" role="button"
+        rel="nofollow" target="_blank">
+        <i class="fab fa-youtube"></i>
+      </a>
+      <a href="https://www.facebook.com/" class="btn btn-primary m-1" role="button" rel="nofollow"
+        target="_blank">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="https://twitter.com/Herr_Zee" class="btn btn-primary m-1" role="button" rel="nofollow"
+        target="_blank">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="https://github.com/zayyadi" class="btn btn-primary m-1" role="button" rel="nofollow"
+        target="_blank">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
     {% include "footer.html" %}
   </body>
 </html>

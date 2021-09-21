@@ -1,1 +1,48 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html>
+  <head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <title>{% block head_title %}{% endblock %}</title>
+    {% block extra_head %}
+    {% endblock %}
+  </head>
+  <body>
+    {% block body %}
+
+    {% if messages %}
+    <div>
+      <strong>Messages:</strong>
+      <ul>
+        {% for message in messages %}
+        <li>{{message}}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    <div>
+      <strong>Menu:</strong>
+      <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
+        <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+        {% else %}
+        <li class="nav-item" role="presentation"><a class="nav-link active" id="tab-login" data-mdb-toggle="pill" href="{% url 'account_login' %}" role="tab" aria-controls="pills-login" aria-selected="true">Sign In</a></li>
+        <li class="nav-item" role="presentation"><a class="nav-link" id="tab-register" data-mdb-toggle="pill" href="{% url 'account_signup' %}" role="tab" aria-controls=" pills-register" aria-selected="false">Sign Up</a></li>
+        {% endif %}
+      </ul>
+      <div class="tab-content">
+  <div
+    class="tab-pane fade show active"
+    id="pills-login"
+    role="tabpanel"
+    aria-labelledby="tab-login"
+  >
+    </div>
+    {% block content %}
+    {% endblock %}
+    {% endblock %}
+    {% block extra_body %}
+    {% endblock %}
+  </body>
+</html>

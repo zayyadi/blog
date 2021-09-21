@@ -14,8 +14,7 @@ from pathlib import Path
 import os
 
 import environ
-import cloudinary
-import cloudinary_storage
+
 
 # Initialise environment variables
 env = environ.Env()
@@ -56,6 +55,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
     'django_extensions',
+    'django_social_share',
     'webpush',
 ]
 

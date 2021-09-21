@@ -1,5 +1,5 @@
 {% load static %}
-<style>
+{% comment %} <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
@@ -13,7 +13,7 @@
           font-size: 3.5rem;
         }
       }
-</style>
+</style> {% endcomment %}
 
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="home" viewBox="0 0 16 16">
@@ -71,6 +71,11 @@
               </a>
             </li>
             <li>
+              {% for category in category.all %}
+              <a href="{% url 'blog:category' category.slug %}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ category }} <span class="caret"></span></a>
+              {% endfor %}
+            </li>
+            <li>
               <a href="{% url 'blog:profile' %}" class="nav-link text-white">
                 <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#people-circle"/></svg>
                 Profile
@@ -97,6 +102,5 @@
         </div>
       </div>
     </div>
-  </header>
-</main>
+</header>
 
