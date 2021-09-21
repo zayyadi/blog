@@ -24,7 +24,7 @@ from blog.sitemaps import PostSitemap
 import debug_toolbar
 from .views import send_push, home
 from django.views.generic import TemplateView
-
+from django.contrib.auth import views as auth_views
 
 sitemaps = {
     "posts": PostSitemap,
@@ -35,10 +35,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('debug/', include(debug_toolbar.urls)),
     path('', include('blog.urls')),
-    path('accounts/', include('allauth.urls')),
     path('summernote/', include('django_summernote.urls')),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
     path('home', home),
+    path('login/', auth_views.login, name='login'),
+    path('logout/', auth_views.logout, name='logout'),
+    path('oauth', include('social_django.urls', name='social')),
     path('send_push', send_push),
     path('webpush/', include('webpush.urls')),
     path('sw.js', TemplateView.as_view(template_name='sw.js', content_type='application/x-javascript')),

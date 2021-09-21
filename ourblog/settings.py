@@ -47,13 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'debug_toolbar',
     'crispy_forms',
+    'social_django',
     'blog',
     'taggit',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.facebook',
     'django_extensions',
     'django_social_share',
     'webpush',
@@ -76,8 +72,10 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
@@ -94,6 +92,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -134,8 +134,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
-AUTHENTICATION_BACKENDS = [ 'django.contrib.auth.backends.ModelBackend',
-                           'allauth.account.auth_backends.AuthenticationBackend']
+AUTHENTICATION_BACKENDS = ('social_core.backends.github.GithubOAuth2',
+                            'social_core.backends.twitter.TwitterOAuth',
+                            'social_core.backends.facebook.FacebookOAuth2',
+                            'django.contrib.auth.backends.ModelBackend')
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -186,55 +188,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
-LOGIN_REDIRECT_URL = 'articles'
+""" LOGIN_REDIRECT_URL = 'articles'
 LOGIN_URL = '/accounts/login'
-ACCOUNT_LOGOUT_REDIRECT_URL ='/accounts/login/'
+ACCOUNT_LOGOUT_REDIRECT_URL ='/accounts/login/' """
 SUMMERNOTE_THEME = 'bs4'
 
-ACCOUNT_AUTHENTICATION_METHOD = 'email' 
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS=7
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory' 
-ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400
-SOCIALACCOUNT_PROVIDERS = {
-    'facebook': {
-        'METHOD': 'oauth2',
-        'SCOPE': ['email', 'public_profile', 'user_friends'],
-        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
-        'INIT_PARAMS': {'cookie': True},
-        'FIELDS': [
-            'id',
-            'email',
-            'name',
-            'first_name',
-            'last_name',
-            'verified',
-            'locale',
-            'timezone',
-            'link',
-            'gender',
-            'updated_time',
-        ],
-        'EXCHANGE_TOKEN': True,
-        'LOCALE_FUNC': lambda request: 'en_US',
-        'VERIFIED_EMAIL': False,
-        'VERSION': 'v2.12',
-    },
-     'google': {
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
-    }
-}
-SOCIALACCOUNT_QUERY_EMAIL=ACCOUNT_EMAIL_REQUIRED
-SOCIALACCOUNT_EMAIL_REQUIRED=ACCOUNT_EMAIL_REQUIRED 
-SOCIALACCOUNT_STORE_TOKENS=False
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
