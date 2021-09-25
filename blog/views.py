@@ -56,6 +56,10 @@ def articles(request, slug=None, tag_slug=None):
         tag= get_object_or_404(Tag, slug=tag_slug)
         articles = Article.objects.filter(tags__in=[tag])
 
+    query = request.GET.get("q")
+    if query:
+        articles=Article.objects.filter(Q(title__icontains=query) | Q(tags__name__icontains=query)).distinct()
+
     context = {
         "articles": articles,
         "tag":tag,
