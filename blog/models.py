@@ -69,22 +69,15 @@ class Article(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Article,on_delete=models.CASCADE,related_name='comments')
-    author = models.ManyToManyField(User, related_name="authors")
+    name = models.CharField(max_length=255)
     body = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
-    active = models.BooleanField(default=False)
-    email = models.EmailField()
-    parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE)
-    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['created_on']
-    
-    def get_comments(self):
-        return Comment.objects.filter(parent=self).filter(active=True)
 
     def __str__(self):
-        return f"Comment {self.body} by {self.author}"
+        return f"Comment {self.body} by {self.name}"
 
 LIKE_CHOICES = (
     ('Like', 'Like'),

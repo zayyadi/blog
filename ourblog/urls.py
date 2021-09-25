@@ -25,6 +25,7 @@ import debug_toolbar
 from .views import send_push, home
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
+import blog.views as blog_views
 
 sitemaps = {
     "posts": PostSitemap,
@@ -37,10 +38,13 @@ urlpatterns = [
     path('', include('blog.urls')),
     path('summernote/', include('django_summernote.urls')),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
+    path('settings/', blog_views.settings, name='settings'),
+    path('settings/password/', blog_views.password, name='password'),
     path('home', home),
-    path('login/', auth_views.login, name='login'),
-    path('logout/', auth_views.logout, name='logout'),
-    path('oauth', include('social_django.urls', name='social')),
+    path('register/', blog_views.register, name='register'),
+    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name='logout'),
+    path('oauth/', include('social_django.urls', namespace='social')),
     path('send_push', send_push),
     path('webpush/', include('webpush.urls')),
     path('sw.js', TemplateView.as_view(template_name='sw.js', content_type='application/x-javascript')),

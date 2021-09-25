@@ -36,16 +36,6 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ['image']
 
 
-
-
-
-class UserRegisterForm(UserCreationForm):
-    email = forms.EmailField()
-
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password1', 'password2']
-
 class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
@@ -58,9 +48,9 @@ class ArticleForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ('email','body')
+        fields = ('name','body')
 
     def __init__(self, *args, **kwargs):
         super(CommentForm, self).__init__(*args, **kwargs)
-        self.fields['email'].widget.attrs = {'placeholder': 'Enter email', 'class':'form-control'}
+        self.fields['name'].widget.attrs = {'placeholder': 'Enter your Name', 'class':'form-control'}
         self.fields['body'].widget.attrs = {'placeholder': 'Comment here...', 'class':'form-control', 'rows':'5'}

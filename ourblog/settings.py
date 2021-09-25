@@ -25,9 +25,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
-
+SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'wt&d2y)^fpwkhhvzdxtostzyz+qm#xbsj=6==m2k9uv2eep2je'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -72,7 +71,6 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
@@ -185,12 +183,18 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/settings/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/settings/'
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+
+SOCIAL_AUTH_GITHUB_KEY = env('client_id')
+SOCIAL_AUTH_GITHUB_SECRET = env('client_secret')
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
-""" LOGIN_REDIRECT_URL = 'articles'
-LOGIN_URL = '/accounts/login'
-ACCOUNT_LOGOUT_REDIRECT_URL ='/accounts/login/' """
+LOGIN_REDIRECT_URL = 'articles'
+LOGIN_URL = 'login'
+ACCOUNT_LOGOUT_REDIRECT_URL ='logout'
 SUMMERNOTE_THEME = 'bs4'
 
 
