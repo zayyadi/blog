@@ -1,21 +1,22 @@
-from django.shortcuts import render,redirect,get_object_or_404
-from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm, UserCreationForm
-from django.contrib.auth import update_session_auth_hash
-from social_django.models import UserSocialAuth
-from .forms import CommentForm, ArticleForm, UserUpdateForm, ProfileUpdateForm, UserRegisterForm
-from .models import Article, Comment, Category, Profile
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.db.models import Count
-from django.template.defaultfilters import slugify
-from django.urls import reverse
-from django.db.models import Count,Q
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import (AdminPasswordChangeForm,
+                                       PasswordChangeForm, UserCreationForm)
+from django.contrib.auth.models import User
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db.models import Count, Q
+from django.http import JsonResponse
+from django.shortcuts import (HttpResponseRedirect, get_object_or_404,
+                              redirect, render)
+from django.template.defaultfilters import slugify
+from django.views.generic import CreateView, ListView
+from social_django.models import UserSocialAuth
 from taggit.models import Tag
-from django.views.generic import CreateView, DetailView
-import random
+
+from .forms import (ArticleForm, CommentForm, ProfileUpdateForm,
+                    UserRegisterForm, UserUpdateForm, PostSearchForm, CategoryForm)
+from .models import Article, Category, Profile
 
 
 def register(request):
@@ -31,14 +32,22 @@ def register(request):
     return render(request, 'register.html', {'form': form})
 
 
-class AddCategoryView(CreateView):
-    model = Category
-    template_name = 'addCategory.html'
-    fields = '__all__'
+@login_required
+def addCategory(request):
+    form = CategoryForm(request.POST or None,request.FILES or None)
+    
+    if form.is_valid():
+        article = form.save(commit=False)
+        article.author = request.user
+        article.save()
+        form.save_m2m()
 
-def CategoryView(request, category):
-    category_post = Article.objects.filter(category=category)
-    return render(request, 'categories.html', {'category':category, 'category_post':category_post})
+        messages.success(request,"Category created successfully")
+        return redirect("blog:articles")
+    context = {
+    'form':form,
+}
+    return render(request,"addCategory.html",context)
 
 def articles(request, slug=None, tag_slug=None):
     articles = Article.objects.all()
@@ -56,9 +65,6 @@ def articles(request, slug=None, tag_slug=None):
         tag= get_object_or_404(Tag, slug=tag_slug)
         articles = Article.objects.filter(tags__in=[tag])
 
-    query = request.GET.get("q")
-    if query:
-        articles=Article.objects.filter(Q(title__icontains=query) | Q(tags__name__icontains=query)).distinct()
 
     context = {
         "articles": articles,
@@ -68,7 +74,7 @@ def articles(request, slug=None, tag_slug=None):
     
     return render(request,"articles.html", context)   
 
-
+@login_required
 def LikeView(request, slug):
     article = get_object_or_404(Article, slug=slug)
     article.likes.add(request.user)
@@ -107,15 +113,41 @@ def addArticle(request):
 
 def detail(request,post):
     #article = Article.objects.filter(id = id).first()   
-    article = get_object_or_404(Article, slug=post)
-    # all_article = list(Article.objects.exclude(slug=post))
-    #comments = article.comments.all()
+    article = get_object_or_404(Article, slug=post, status='published')
+    allcomments = article.comments.filter(status=True)
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(allcomments, 10)
+    try:
+        comments = paginator.page(page)
+    except PageNotAnInteger:
+        comments = paginator.page(1)
+    except EmptyPage:
+        comments = paginator.page(paginator.num_pages)
     article_tags= Article.tags.values_list('id', flat=True)
     similar_posts = Article.objects.filter(tags__in=article_tags).exclude(id=article.id)
-    similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags','-pub_date')[:3]
+    similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags','-publish')[:3]
+
+    comments = article.comments.filter(status=True)
+
+    user_comment = None
+
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            user_comment = comment_form.save(commit=False)
+            user_comment.post = article
+            user_comment.save()
+            return HttpResponseRedirect(request.path_info)
+    else:
+        comment_form = CommentForm()
   
 
     context = {
+        "comments": user_comment,
+        "comments": comments,
+        "comment_form": comment_form,
+        "allcomments":allcomments,
         "article":article,
         "similar_posts":similar_posts 
     }
@@ -227,3 +259,56 @@ def password(request):
         form = PasswordForm(request.user)
     return render(request, 'password.html', {'form': form})
 
+def validate_username(request):
+    """Check username availability"""
+    username = request.GET.get('username', None)
+    response = {
+        'is_taken': User.objects.filter(username__iexact=username).exists()
+    }
+    return JsonResponse(response)
+
+
+def category(request, category_slug):
+    category = get_object_or_404(Category, slug=category_slug)
+    article = Article.objects.filter(category=category)
+
+    context = {
+        'category': category,
+        'article': article
+    }
+    
+    return render(request,'category.html',context)
+
+
+def category_list(request):
+    category_list = Category.objects.exclude(name='default')
+    context = {
+        "category_list": category_list,
+    }
+    return context
+
+
+def post_search(request):
+    form = PostSearchForm()
+    q = ''
+    c = ''
+    results = []
+    query = Q()
+
+    if 'q' in request.GET:
+        form = PostSearchForm(request.GET)
+        if form.is_valid():
+            q = form.cleaned_data['q']
+            c = form.cleaned_data['c']
+
+            if c is not None:
+                query &= Q(category=c)
+            if q is not None:
+                query &= Q(title__contains=q)
+
+            results = Article.objects.filter(query)
+
+    return render(request, 'search.html',
+                  {'form': form,
+                   'q': q,
+                   'results': results})

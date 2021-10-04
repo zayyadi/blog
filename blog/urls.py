@@ -1,9 +1,9 @@
-
 from django.urls import path
 
 from blog import views
-from .feeds import LatestPostsFeed, AtomSiteNewsFeed
-from blog.views import AddCategoryView
+
+from .feeds import AtomSiteNewsFeed, LatestPostsFeed
+
 app_name = 'blog'
 
 urlpatterns=[
@@ -17,7 +17,9 @@ urlpatterns=[
     path('delete/<slug:slug>',views.deleteArticle,name = "delete"),
     path('',views.articles,name = "articles"),
     path('like/<slug:slug>', views.LikeView, name="article_like"),
-    path('add_catergory/', AddCategoryView.as_view(), name="add_category"),
-    path('category/<str:category>/', views.CategoryView, name='category'),
+    path('add_catergory/', views.addCategory, name="add_category"),
+    path('category/<slug:category_slug>', views.category, name='category'),
+    path('validate_username', views.validate_username, name='validate_username'),
     path('profile/', views.profile, name='profile'), 
+    path('search/', views.post_search, name='post_search'),
 ]

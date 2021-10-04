@@ -1,91 +1,28 @@
 {% extends "base.html" %}
 
-{% block body %}
-
-<!-- Cookie Consent by https://www.TermsFeed.com -->
-<script type="text/javascript" src="//www.termsfeed.com/public/cookie-consent/4.0.0/cookie-consent.js" charset="UTF-8"></script>
-<script type="text/javascript" charset="UTF-8">
-document.addEventListener('DOMContentLoaded', function () {
-cookieconsent.run({"notice_banner_type":"headline","consent_type":"express","palette":"dark","language":"en","page_load_consent_levels":["strictly-necessary"],"notice_banner_reject_button_hide":false,"preferences_center_close_button_hide":false,"website_name":"Ourblog","open_preferences_center_selector":"#cookies_center"});
-});
-</script>
-
-<noscript>Cookie Consent by <a href="https://www.TermsFeed.com/" rel="nofollow noopener">TermsFeed Generator</a></noscript>
-<!-- End Cookie Consent -->
-<div class ="row">
-    
-        <div class="col-md-10 offset-md-3">
-            <div class="col-lg-8">
-                <h1>Articles</h1>
-                <hr>
+{% block content %}
+    <div class="album py-5 bg-light">
+      <div class="container">
+        <div class="row">
+          {% for post in articles %}
+          <div class="col-md-4">
+            <a class="text-dark" href="{{post.get_absolute_url}}">
+              <div class="card mb-4 box-shadow">
+                <img class="card-img-top" src="{{post.image.url}}" alt="{{ post.title }}">
+                <div class="card-body">
+                  <h2 style="font-size:18px;font-weight:bold">{{post.title|truncatechars:50}}</h2>
+                  <p class="card-text">{{post.snippet|truncatechars:50}}</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">{{ post.publish.date }}</small>
+                  </div>
                 </div>
-        </div>
-</div>
-
-{% if articles %}
-
-{% for post in articles %}
-
-  <p> Tags:
-
-
-  {% for tag in article.tags.all %}
-      <a href="{% url 'blog:article_tag' tag.slug %}" class="badge badge-success">{{ tag.name }}</a>
-  {% if not forloop.last %},{% endif %}
-  {% endfor %}
-  </p>
-
-  <div class="card mb-3">
-    <div class="card-body">
-        <div class="row g-0">
-            <div class="col-md-5">
-                <div class="ratio ratio-16x9">
-                    <img src="{{ post.image.url }}" class="rounded featured-image-list" alt="{{post.title}}">
-                </div>
-            </div>
-            <div class="col-md-7 ps-md-3 pt-3 pt-md-0 d-flex flex-column">
-
-                <h2 class="card-title h5">
-                    <a href="{{ post.get_absolute_url }}">
-                        {{ post.title }}
-                    </a>
-                </h2>
-
-                <div class="text-muted">
-                    <small>
-                        Published {{ post.publish.date }} by <strong>{{ post.author }}</strong>
-                    </small>
-                </div>
-
-
-                <p class="card-text mb-auto py-2">{{ post.snippet }}</p>
-
-
-                <div>
-                    <a href="{{ post.get_absolute_url }}" class="btn btn-primary btn-sm">Read more</a>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-{% endfor %}
-{% else %}
-  <div class ="row">
-      
-    <div class="col-md-10 offset-md-3">
-      <div class="col-lg-8">
-        <div class = "alert alert-danger">
-          Article Not Found
+              </div>
+            </a>
+          </div>
+          {% endfor %}
         </div>
       </div>
     </div>
-  </div>
-{% endif %}
-    <br>
-    <br>
-    <br />
-    <h3 class="text-center">{% include 'pagination.html' with page=articles %}</h3>
+     <h3 class="text-center">{% include 'pagination.html' with page=articles %}</h3>
 
-{% endblock body %}
+{% endblock %}

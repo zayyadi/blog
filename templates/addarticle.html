@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Create a new Article{% endblock %}
-{% block body %}
+{% block content %}
 {% load crispy_forms_tags %}
 {% if user.is_authenticated %}
 
@@ -25,6 +25,6 @@
 {% else %}
 You are not allowed on this page
 {% endif %}
-{% endif %}
 
-{% endblock body %}
+
+{% endblock %}

@@ -1,52 +1,95 @@
-{% load static %}
-{% load social_share %}
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="en">
+
 <head>
+  <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>ZeeBLOG - {% block title %}{% endblock title %}</title>
-  {% include 'links.html' %}
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    {% include 'links.html' %}
+
+  <title>{% block title %} Welcome to blog {% endblock %}</title>
+
 </head>
 
-{% include 'navbar.html' %} 
-<br /><br />
-<main class="container my-3">
-        
-</main>
-<body class="w3-light-grey">  
-    <div style = "margin-top : 100px; margin-bottom:100px;" class = "container">
-            
-        {% if messages %}
-            
-            {% for message in messages %}
-            {% if message.tags == "info" %}
-            <div class="alert alert-danger">{{ message }}</div>
-            {% else %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Blog</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-            {% endif %}
-
-
-            {% endfor %}
-            
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+          </li>
+        {% if user.is_authenticated %}
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'blog:addarticle' %}">Add article </a>
+          </li>
+          <li class="nav-item active">
+                <a href="{% url 'blog:add_category' %}" class="nav-link">
+                  Add Category
+                </a>
+              </li>
+          <li class="nav-item active">
+                <a href="{% url 'blog:dashboard' %}" class="nav-link">
+                  Dashboard
+                </a>
+              </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/search">Search</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Categories
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{% url "blog:articles" %}">All</a></li>
+              {% for c in category_list %}
+                <li {% if category.slug == c.slug %}class="selected" {% endif %}>
+                    <a class="dropdown-item" href="{{ c.get_absolute_url }}">{{ c.name|title }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'logout' %}">Logout </a>
+          </li>
+        {% else %}
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'register' %}">Register </a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'login' %}">Login </a>
+          </li>
+        </ul>
         {% endif %}
-        {% block body %}
-        
-        {% endblock body %}
-
+      <form class="form-inline my-2 my-lg-0" action="/search/" method="get">
+        <input class="form-control mr-sm-2" name="q" type="search" placeholder="Search" aria-label="Search" required>
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
     </div>
-    {% include "scripts.html" %}
+  </nav>
+  {% block content %}
+  {% endblock %}
+  {% include 'footer.html' %}
+ 
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+  </script>
+</body>
 
-    {% block extra_scripts %}
-    {% endblock extra_scripts %}
-    <hr class="m-0" />
-
-    
-    {% include "footer.html" %}
-  </body>
 </html>

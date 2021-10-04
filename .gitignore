@@ -1,3 +1,6 @@
 *.pyc
 *vscode
 *.env
+*venv
+*./templates/articledump.html
+*.gitignore

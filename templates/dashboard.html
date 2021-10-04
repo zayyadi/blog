@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block body %}
+{% block content %}
 <h3>Control Panel</h3>
 <hr>
 <p>
@@ -27,7 +27,7 @@
             <th scope="row">{{article.id}}</th>
             <td><a href="{% url 'blog:detail' article.slug %}">{{article.title}}</a></td>
             <td>{{article.author.username}}</td>
-            <td>{{article.pub_date}}</td>
+            <td>{{article.publish.date}}</td>
             <td><a href="{% url 'blog:update' article.slug %}" class = "btn btn-success">Update</a></td>
             <td><a href="{% url 'blog:delete' article.slug %}" class = "btn btn-danger">Delete</a> </td>
               
@@ -45,5 +45,5 @@ You don't have any articles yet...
 
 
 
-{% endblock body %}
+{% endblock %}
 

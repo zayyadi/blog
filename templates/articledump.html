@@ -78,3 +78,331 @@ cookieconsent.run({"notice_banner_type":"headline","consent_type":"express","pal
     <h3 class="text-center">{% include 'pagination.html' with page=articles %}</h3>
 
 {% endblock body %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<--base.html dump-->
+{% load static %}
+{% load social_share %}
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>ZeeBLOG - {% block title %}{% endblock title %}</title>
+  {% include 'links.html' %}
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+{% include 'navbar.html' %} 
+<br /><br />
+<main class="container my-3">
+        
+</main>
+<body class="w3-light-grey">  
+    <div style = "margin-top : 100px; margin-bottom:100px;" class = "container">
+            
+        {% if messages %}
+            
+            {% for message in messages %}
+            {% if message.tags == "info" %}
+            <div class="alert alert-danger">{{ message }}</div>
+            {% else %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+
+            {% endif %}
+
+
+            {% endfor %}
+            
+        {% endif %}
+        {% block body %}
+        
+        {% endblock body %}
+
+    </div>
+    {% include "scripts.html" %}
+
+    {% block extra_scripts %}
+    {% endblock extra_scripts %}
+    <hr class="m-0" />
+
+    
+    {% include "footer.html" %}
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Cookie Consent by https://www.TermsFeed.com -->
+<script type="text/javascript" src="//www.termsfeed.com/public/cookie-consent/4.0.0/cookie-consent.js" charset="UTF-8"></script>
+<script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({"notice_banner_type":"headline","consent_type":"express","palette":"dark","language":"en","page_load_consent_levels":["strictly-necessary"],"notice_banner_reject_button_hide":false,"preferences_center_close_button_hide":false,"website_name":"Ourblog","open_preferences_center_selector":"#cookies_center"});
+});
+</script>
+
+<noscript>Cookie Consent by <a href="https://www.TermsFeed.com/" rel="nofollow noopener">TermsFeed Generator</a></noscript>
+<!-- End Cookie Consent -->
+<div class ="row">
+    
+        <div class="col-md-10 offset-md-3">
+            <div class="col-lg-8">
+                <h1>Articles</h1>
+                <hr>
+                </div>
+        </div>
+</div>
+
+{% if articles %}
+
+{% for post in articles %}
+
+  <p> Tags:
+
+
+  {% for tag in article.tags.all %}
+      <a href="{% url 'blog:article_tag' tag.slug %}" class="badge badge-success">{{ tag.name }}</a>
+  {% if not forloop.last %},{% endif %}
+  {% endfor %}
+  </p>
+
+  <div class="card mb-3">
+    <div class="card-body">
+        <div class="row g-0">
+            <div class="col-md-5">
+                <div class="ratio ratio-16x9">
+                    <img src="{{ post.image.url }}" class="rounded featured-image-list" alt="{{post.title}}">
+                </div>
+            </div>
+            <div class="col-md-7 ps-md-3 pt-3 pt-md-0 d-flex flex-column">
+
+                <h2 class="card-title h5">
+                    <a href="{{ post.get_absolute_url }}">
+                        {{ post.title }}
+                    </a>
+                </h2>
+
+                <div class="text-muted">
+                    <small>
+                        Published {{ post.publish.date }} by <strong>{{ post.author }}</strong>
+                    </small>
+                </div>
+
+
+                <p class="card-text mb-auto py-2">{{ post.snippet }}</p>
+
+
+                <div>
+                    <a href="{{ post.get_absolute_url }}" class="btn btn-primary btn-sm">Read more</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+{% else %}
+  <div class ="row">
+      
+    <div class="col-md-10 offset-md-3">
+      <div class="col-lg-8">
+        <div class = "alert alert-danger">
+          Article Not Found
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+    <br>
+    <br>
+    <br />
+    <h3 class="text-center">{% include 'pagination.html' with page=articles %}</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+{% extends "base.html" %}
+{% load social_share %}
+{% load crispy_forms_tags %}
+{% block title %} {{ article.title }} {% endblock title %}
+{% block body %}
+
+<style>
+  @media screen and (min-width: 600px) {
+    .children form {
+      margin-left: -48px;
+      /* will touch very left side */
+    }
+
+    .children .children form {
+      margin-left: -96px;
+      /* will touch very left side */
+    }
+  }
+</style>
+
+<div class="container">
+  <div class="row justify-content-md-center pt-5">
+
+    <div class="col-md-7">
+      <h1>{{article.title}}</h1>
+    </div>
+    <div class="col-md-9"><img class="card-img-top" src="{{article.image.url}}" alt="{{ article.title }}"></div>
+    <div class="col-md-7">
+      <p>{{article.content|safe}}</p>
+    </div>
+    <div class="col-md-7">
+
+      {% with comments.count as total_comments %}
+      <h2>
+        {{ total_comments }} comment{{ total_comments|pluralize }}
+      </h2>
+      {% endwith %}
+
+      {% load mptt_tags %}
+
+      <div>
+        {% recursetree comments %}
+        <div id="{{ node.id }}" class="my-2 p-2" style="border: 1px solid grey">
+          <div class="d-flex justify-content-between">By {{ node.name }}<div></div>{{ node.publish }}</div>
+          <div>{{ node.body }}</div>
+          <hr />
+          {% if node.level < 3 %}
+          <button class="button" onclick="myFunction({{ node.id }})">Reply</button>
+          {% endif %}
+        </div>
+        {% if not node.is_leaf_node %}
+        <div class="children pl-2 pl-md-5">
+          {{ children }}
+        </div>
+        {% endif %}
+        {% endrecursetree %}
+      </div>
+
+      <div class="py-4">
+        <nav aria-label="Page navigation example">
+          {% if comments.has_other_pages %}
+          <ul class="pagination">
+            {% if comments.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ comments.previous_page_number }}">Previous</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+            {% endif %}
+            {% for num in comments.paginator.page_range %}
+            {% if comments.number == l %}
+            <li class="page-item active"><span class="page-link">{{ num }} <span class="sr-only">(current)</span></span>
+            </li>
+            {% else %}
+            <li><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if comments.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ comments.next_page_number }}">Next</a></li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+            {% endif %}
+          </ul>
+          {% endif %}
+        </nav>
+      </div>
+
+      <div id="myDIV" style="display:block;">
+        <form id="myForm" method="post">
+          <h2>Create new comment</h2>
+          {{ comment_form|crispy }}
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>
+  function formExit() {
+    document.getElementById("newForm").remove();
+  }
+
+  function myFunction(id) {
+    if (document.contains(document.getElementById("newForm"))) {
+      document.getElementById("newForm").remove();
+    }
+
+    var d1 = document.getElementById(id);
+    d1.insertAdjacentHTML('afterend',
+      '<form id="newForm" class="form-insert py-2" method="post"> \
+                <div class="d-flex justify-content-between"><h2>Reply:</h2><div><button type="button" class="btn btn-outline-secondary" onclick="formExit()"">Close</button></div></div> \
+                <label for="id_name">Name:</label> \
+                <input type="text" name="name" class="col-sm-12" maxlength="50" required="" id="id_name">\
+                <select name="parent" class="d-none" id="id_parentt"> \
+                <option value="' + id + '" selected="' + id + '"></option> \
+                </select> \
+                <label for="id_email">Email:</label> \
+                <input type="text" name="email" class="col-sm-12" maxlength="254" required="" id="id_email"> \
+                <label for="id_content">Content:</label> \
+                <textarea name="content" cols="40" rows="5" class="form-control" required id="id_content"></textarea> \
+                {% csrf_token %} \
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button> \
+              </form>');
+
+    //document.querySelector('#id_parentt [value="' + id + '"]').selected = true;
+  }
+
+  $('#myForm').trigger("reset");
+</script>
+
+
+{% endblock body %}
