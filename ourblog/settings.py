@@ -113,10 +113,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-AUTHENTICATION_BACKENDS = ('social_core.backends.github.GithubOAuth2',
+AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
+                            'social_core.backends.github.GithubOAuth2',
                             'social_core.backends.twitter.TwitterOAuth',
-                            'social_core.backends.facebook.FacebookOAuth2',
-                            'django.contrib.auth.backends.ModelBackend')
+                            'social_core.backends.facebook.FacebookOAuth2')
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -142,7 +142,7 @@ WEBPUSH_SETTINGS = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Lagos'
 
 USE_I18N = True
 
@@ -158,6 +158,13 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+
+LOGIN_REDIRECT_URL = ''
+LOGIN_URL = 'login'
+ACCOUNT_LOGOUT_REDIRECT_URL ='logout'
+SUMMERNOTE_THEME = 'bs4'
+
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/settings/'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/settings/'
@@ -167,11 +174,6 @@ SOCIAL_AUTH_GITHUB_KEY = env('client_id')
 SOCIAL_AUTH_GITHUB_SECRET = env('client_secret')
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
-
-LOGIN_REDIRECT_URL = 'settings'
-LOGIN_URL = 'login'
-ACCOUNT_LOGOUT_REDIRECT_URL ='logout'
-SUMMERNOTE_THEME = 'bs4'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
