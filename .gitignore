@@ -4,3 +4,4 @@
 *venv
 *./templates/articledump.html
 *.gitignore
+*.ipynb
