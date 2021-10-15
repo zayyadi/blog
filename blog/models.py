@@ -1,7 +1,7 @@
 import os
 from uuid import uuid4
 
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
@@ -52,7 +52,7 @@ class Article(models.Model):
     )
 
     title = models.CharField(max_length=150)
-    author = models.ForeignKey(User, on_delete= models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete= models.CASCADE)
     content = SummernoteTextField()
     image = models.ImageField(upload_to=path_and_rename, default='article/default.jpg')
     publish = models.DateTimeField(default=timezone.now)
@@ -60,7 +60,7 @@ class Article(models.Model):
     slug = models.SlugField(unique=True, max_length=100)
     tags = TaggableManager()
     category = models.ForeignKey(Category, on_delete=models.PROTECT, default=1)
-    likes = models.ManyToManyField(User, blank=True, related_name='likes')
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='likes')
     snippet = models.CharField(max_length=255)
     
 
@@ -113,21 +113,4 @@ LIKE_CHOICES = (
     ('Unlike', 'Unlike'),
 )
 
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='default.jpg', upload_to='profile_pics')
-
-    def __str__(self):
-        return f'{self.user.username} Profile'
-
-    def save(self):
-        super().save()
-
-        img = Image.open(self.image.path)
-
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            img.thumbnail(output_size)
-            img.save(self.image.path)
 

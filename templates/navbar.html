@@ -65,18 +65,18 @@
               </a>
             </li>
              <li>
-              <a href="{% url 'logout' %}" class="nav-link text-white">
+              <a href="{% url 'users:logout' %}" class="nav-link text-white">
                 Logout
               </a>
             </li>
         {% else %}
             <li>
-              <a href="{% url 'register' %}" class="nav-link text-white">
+              <a href="{% url 'users:register' %}" class="nav-link text-white">
                 Register
               </a>
             </li>
             <li>
-              <a href="{% url 'login' %}" class="nav-link text-white">
+              <a href="{% url 'users:login' %}" class="nav-link text-white">
                 Login
               </a>
             </li>

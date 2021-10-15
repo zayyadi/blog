@@ -25,7 +25,7 @@
                 // create an AJAX call
                 $.ajax({
                     data: $(this).serialize(), // get the form data
-                    url: "{% url 'blog:validate_username' %}",
+                    url: "{% url 'users:validate_username' %}",
                     // on success
                     success: function (response) {
                         if (response.is_taken == true) {

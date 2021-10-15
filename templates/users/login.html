@@ -10,7 +10,7 @@
         class="nav-link active"
         id="tab-login"
         data-mdb-toggle="pill"
-        href={% url "login" %}
+        href={% url "users:login" %}
         role="tab"
         aria-controls="pills-login"
         aria-selected="true"
@@ -22,7 +22,7 @@
         class="nav-link"
         id="tab-register"
         data-mdb-toggle="pill"
-        href={% url "register" %}
+        href={% url "users:register" %}
         role="tab"
         aria-controls="pills-register"
         aria-selected="false"
@@ -76,7 +76,7 @@
         </div>
         <!-- Register buttons -->
         <div class="text-center">
-            <p>Not a member? <a href={% url "register" %}>Register</a></p>
+            <p>Not a member? <a href={% url "users:register" %}>Register</a></p>
         </div>
     </div>
 {% endblock %}

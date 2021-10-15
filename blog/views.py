@@ -1,35 +1,15 @@
 from django.contrib import messages
-from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import (AdminPasswordChangeForm,
-                                       PasswordChangeForm, UserCreationForm)
-from django.contrib.auth.models import User
+#from users.models import NewUser
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Count, Q
-from django.http import JsonResponse
 from django.shortcuts import (HttpResponseRedirect, get_object_or_404,
                               redirect, render)
 from django.template.defaultfilters import slugify
-from django.views.generic import CreateView, ListView
-from social_django.models import UserSocialAuth
 from taggit.models import Tag
+from .models import Article, Category
 
-from .forms import (ArticleForm, CommentForm, ProfileUpdateForm,
-                    UserRegisterForm, UserUpdateForm, PostSearchForm, CategoryForm)
-from .models import Article, Category, Profile
-
-
-def register(request):
-    if request.method == 'POST':
-        form = UserRegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username=form.cleaned_data.get('username')
-            messages.success(request, f'Your account has been created! You are now able to log in')
-            return redirect('login')
-    else:
-        form = UserCreationForm()
-    return render(request, 'register.html', {'form': form})
+from .forms import ArticleForm, CommentForm, PostSearchForm, CategoryForm
 
 
 @login_required
@@ -47,7 +27,7 @@ def addCategory(request):
     context = {
     'form':form,
 }
-    return render(request,"addCategory.html",context)
+    return render(request,"blog/addCategory.html",context)
 
 def articles(request, slug=None, tag_slug=None):
     articles = Article.objects.all()
@@ -72,7 +52,7 @@ def articles(request, slug=None, tag_slug=None):
         "page":page,
         }
     
-    return render(request,"articles.html", context)   
+    return render(request,"blog/articles.html", context)   
 
 @login_required
 def LikeView(request, slug):
@@ -81,7 +61,7 @@ def LikeView(request, slug):
     return redirect('blog:detail', article.slug)
 
 def about(request):
-    return render(request,"about.html")
+    return render(request,"blog/about.html")
 
 @login_required
 def dashboard(request):
@@ -89,7 +69,7 @@ def dashboard(request):
     context = {
         "articles":articles
     }
-    return render(request,"dashboard.html",context)
+    return render(request,"blog/dashboard.html",context)
 
 
 @login_required
@@ -109,7 +89,7 @@ def addArticle(request):
         'common_tags':common_tags,
         'form':form,
     }
-    return render(request,"addarticle.html",context)
+    return render(request,"blog/addarticle.html",context)
 
 def detail(request,post):
     #article = Article.objects.filter(id = id).first()   
@@ -152,7 +132,7 @@ def detail(request,post):
         "similar_posts":similar_posts 
     }
 
-    return render(request,"detail.html",context)
+    return render(request,"blog/detail.html",context)
 
 
 @login_required
@@ -168,7 +148,7 @@ def updateArticle(request, slug):
 
         messages.success(request,"Article has been Updated")
         return redirect("blog:dashboard")
-    return render(request,"update.html",{"form":form})
+    return render(request,"blog/update.html",{"form":form})
 
 
 @login_required
@@ -184,88 +164,7 @@ def deleteArticle(request,slug):
 def tagged(request, tags):
     # tag = get_object_or_404(Tag, slug=slug)
     posts = Article.objects.filter(tags=tags)
-    return render(request, 'articles.html', {'tags':tags, 'posts':posts})
-
-@login_required
-def profile(request):
-    created = Profile.objects.get_or_create(user=request.user)
-    if request.method == 'POST':
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST,
-                                   request.FILES,
-                                   instance=request.user.profile)
-        if u_form.is_valid() and p_form.is_valid():
-            u_form.save()
-            p_form.save()
-            messages.success(request, f'Your account has been updated!')
-            return redirect('blog:profile')
-
-    else:
-        u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.profile)
-
-    context = {
-        'u_form': u_form,
-        'p_form': p_form
-    }
-
-    return render(request, 'profile.html', context)
-
-@login_required
-def settings(request):
-    user = request.user
-
-    try:
-        github_login = user.social_auth.get(provider='github')
-    except UserSocialAuth.DoesNotExist:
-        github_login = None
-
-    try:
-        twitter_login = user.social_auth.get(provider='twitter')
-    except UserSocialAuth.DoesNotExist:
-        twitter_login = None
-
-    try:
-        facebook_login = user.social_auth.get(provider='facebook')
-    except UserSocialAuth.DoesNotExist:
-        facebook_login = None
-
-    can_disconnect = (user.social_auth.count() > 1 or user.has_usable_password())
-
-    return render(request, 'settings.html', {
-        'github_login': github_login,
-        'twitter_login': twitter_login,
-        'facebook_login': facebook_login,
-        'can_disconnect': can_disconnect
-    })
-
-@login_required
-def password(request):
-    if request.user.has_usable_password():
-        PasswordForm = PasswordChangeForm
-    else:
-        PasswordForm = AdminPasswordChangeForm
-
-    if request.method == 'POST':
-        form = PasswordForm(request.user, request.POST)
-        if form.is_valid():
-            form.save()
-            update_session_auth_hash(request, form.user)
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('password')
-        else:
-            messages.error(request, 'Please correct the error below.')
-    else:
-        form = PasswordForm(request.user)
-    return render(request, 'password.html', {'form': form})
-
-def validate_username(request):
-    """Check username availability"""
-    username = request.GET.get('username', None)
-    response = {
-        'is_taken': User.objects.filter(username__iexact=username).exists()
-    }
-    return JsonResponse(response)
+    return render(request, 'blog/articles.html', {'tags':tags, 'posts':posts})
 
 
 def category(request, category_slug):
@@ -277,7 +176,7 @@ def category(request, category_slug):
         'article': article
     }
     
-    return render(request,'category.html',context)
+    return render(request,'blog/category.html',context)
 
 
 def category_list(request):

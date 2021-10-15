@@ -34,8 +34,10 @@ INSTALLED_APPS = [
     'mptt',
     'taggit',
     'django_extensions',
+    'rest_framework',
     'django_social_share',
     'webpush',
+    'users',
 ]
 
 INSTALLED_APPS += ('django_summernote', )
@@ -103,8 +105,12 @@ WSGI_APPLICATION = 'ourblog.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'ourblog', 
+        'USER': 'postgres', 
+        'PASSWORD': env('PASSWORD'),
+        'HOST': '127.0.0.1', 
+        'PORT': '5432',
     }
 }
 
@@ -160,8 +166,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 LOGIN_REDIRECT_URL = ''
-LOGIN_URL = 'login'
-ACCOUNT_LOGOUT_REDIRECT_URL ='logout'
+LOGIN_URL = 'users:login'
+ACCOUNT_LOGOUT_REDIRECT_URL ='users:logout'
 SUMMERNOTE_THEME = 'bs4'
 
 
@@ -182,3 +188,4 @@ EMAIL_HOST = 'smtp.mailtrap.io'
 EMAIL_PORT = 2525
 EMAIL_HOST_USER = env('EMAIL')
 EMAIL_HOST_PASSWORD = env('PASS')
+AUTH_USER_MODEL= 'users.NewUser'

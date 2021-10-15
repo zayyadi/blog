@@ -19,7 +19,5 @@ urlpatterns=[
     path('like/<slug:slug>', views.LikeView, name="article_like"),
     path('add_catergory/', views.addCategory, name="add_category"),
     path('category/<slug:category_slug>', views.category, name='category'),
-    path('validate_username', views.validate_username, name='validate_username'),
-    path('profile/', views.profile, name='profile'), 
     path('search/', views.post_search, name='post_search'),
 ]

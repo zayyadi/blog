@@ -2,7 +2,7 @@ from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
 from mptt.admin import MPTTModelAdmin
 
-from .models import Article, Category, Comment, Profile
+from .models import Article, Category, Comment
 
 
 class PostAdmin(SummernoteModelAdmin):
@@ -27,4 +27,3 @@ class PostAdmin(SummernoteModelAdmin):
 admin.site.register(Article, PostAdmin)
 admin.site.register(Category)
 admin.site.register(Comment, MPTTModelAdmin)
-admin.site.register(Profile)
