@@ -1,15 +1,18 @@
 import os
+
 from uuid import uuid4
 
-from django.conf import settings
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.utils import timezone
+from django.contrib.auth.models import User
+
 from django_summernote.fields import SummernoteTextField
 from mptt.models import MPTTModel, TreeForeignKey
 from PIL import Image
 from taggit.managers import TaggableManager
+
 
 
 def path_and_rename(instance, filename):
@@ -52,7 +55,7 @@ class Article(models.Model):
     )
 
     title = models.CharField(max_length=150)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete= models.CASCADE)
+    author = models.ForeignKey(User, on_delete= models.CASCADE)
     content = SummernoteTextField()
     image = models.ImageField(upload_to=path_and_rename, default='article/default.jpg')
     publish = models.DateTimeField(default=timezone.now)
@@ -60,7 +63,7 @@ class Article(models.Model):
     slug = models.SlugField(unique=True, max_length=100)
     tags = TaggableManager()
     category = models.ForeignKey(Category, on_delete=models.PROTECT, default=1)
-    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='likes')
+    likes = models.ManyToManyField(User, blank=True, related_name='likes')
     snippet = models.CharField(max_length=255)
     
 

@@ -172,8 +172,8 @@ SUMMERNOTE_THEME = 'bs4'
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/settings/'
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/settings/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/users:settings/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/users:settings/'
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 
 SOCIAL_AUTH_GITHUB_KEY = env('client_id')
@@ -188,4 +188,3 @@ EMAIL_HOST = 'smtp.mailtrap.io'
 EMAIL_PORT = 2525
 EMAIL_HOST_USER = env('EMAIL')
 EMAIL_HOST_PASSWORD = env('PASS')
-AUTH_USER_MODEL= 'users.NewUser'

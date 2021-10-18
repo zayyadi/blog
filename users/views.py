@@ -6,43 +6,27 @@ from django.contrib.auth import update_session_auth_hash, authenticate, login, l
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import (AdminPasswordChangeForm,
                                        PasswordChangeForm)
-from users.models import NewUser, Profile
+from users.models import Profile
 from django.http import JsonResponse
 from social_django.models import UserSocialAuth
 from django.views.generic import FormView
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
 
 
 def register(request):
-    form = UserRegisterForm()
     if request.method == 'POST':
-        
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            username=form.cleaned_data.get('username')
-            email=form.cleaned_data.get('email')
-            first_name=form.cleaned_data.get('first_name')
+            username = form.cleaned_data.get('username')
             messages.success(request, f'Your account has been created! You are now able to log in')
             return redirect('login')
     else:
-        form = UserCreationForm()
+        form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
 
-class LoginView(FormView):
-   form_class = AuthenticationForm
-   template_name = 'users/login.html'
 
-   def form_valid(self, form):
-       email = form.cleaned_data['email']
-       password = form.cleaned_data['password']
-       user = authenticate(email=email, password=password)
-
-    # Check here if the user is an admin
-       if user is not None and user.is_active:
-           login(self.request, user)
-           return HttpResponseRedirect(self.success_url)
-       else:
-           return self.form_invalid(form)
 """ def login(request):
 
     email = request.POST['email']
@@ -138,6 +122,6 @@ def validate_username(request):
     """Check username availability"""
     username = request.GET.get('username', None)
     response = {
-        'is_taken': NewUser.objects.filter(username__iexact=username).exists()
+        'is_taken': User.objects.filter(username__iexact=username).exists()
     }
     return JsonResponse(response)

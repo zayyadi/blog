@@ -5,3 +5,4 @@
 *./templates/articledump.html
 *.gitignore
 *.ipynb
+*.ipynb_checkpoints

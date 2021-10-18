@@ -7,7 +7,7 @@
           {% for post in articles %}
           <div class="col-md-4">
             <a class="text-dark" href="{{post.get_absolute_url}}">
-              <div class="card mb-4 box-shadow">
+              <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
                 <img class="card-img-top" src="{{post.image.url}}" alt="{{ post.title }}">
                 <div class="card-body">
                   <h2 style="font-size:18px;font-weight:bold">{{post.title|truncatechars:50}}</h2>
