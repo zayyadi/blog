@@ -16,7 +16,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['75e8de10585d.ngrok.io', '127.0.0.1', 'localhost',]
+ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS = [
@@ -78,7 +78,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
-                'blog.views.category_list',
+                # 'blog.views.category_list',
             ],
         },
     },
@@ -139,13 +139,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-WEBPUSH_SETTINGS = {
-   "VAPID_PUBLIC_KEY": env("Public_Key"),
-   "VAPID_PRIVATE_KEY": env("Private_Key"),
-   "VAPID_ADMIN_EMAIL": "zayyadidris294@gmail.com",
-}
-
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Africa/Lagos'
@@ -172,8 +165,8 @@ SUMMERNOTE_THEME = 'bs4'
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/users:settings/'
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/users:settings/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = 'users:settings'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'users:settings'
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 
 SOCIAL_AUTH_GITHUB_KEY = env('client_id')

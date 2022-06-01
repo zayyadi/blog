@@ -1,17 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="album py-5 bg-light">
-      <div class="container">
-        <div class="row">
+<section class="article">
+        <div class="container">
           {% for post in articles %}
-          <div class="col-md-4">
+          <div class="img-position">
             <a class="text-dark" href="{{post.get_absolute_url}}">
-              <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+              <div class="card-text-white-bg-primary-mb-3" style="max-width: 18rem;">
                 <img class="card-img-top" src="{{post.image.url}}" alt="{{ post.title }}">
                 <div class="card-body">
-                  <h2 style="font-size:18px;font-weight:bold">{{post.title|truncatechars:50}}</h2>
-                  <p class="card-text">{{post.snippet|truncatechars:50}}</p>
+                  <h2 style="font-size:18px;font-weight:bold">{{post.title|truncatechars:20}}</h2></div>
+                  <div class="card-text"><p>{{post.snippet|truncatechars:50}}</p></div> 
                   <div class="d-flex justify-content-between align-items-center">
                     <small class="text-muted">{{ post.publish.date }}</small>
                   </div>
@@ -23,6 +22,9 @@
         </div>
       </div>
     </div>
-     <h3 class="text-center">{% include 'pagination.html' with page=articles %}</h3>
-
+  </section>
+    <section class="pagination">
+      <h3 class="text-center">{% include 'pagination.html' with page=articles %}</h3>
+    </section>
+  
 {% endblock %}

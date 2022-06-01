@@ -91,7 +91,7 @@ def settings(request):
 
     can_disconnect = (user.social_auth.count() > 1 or user.has_usable_password())
 
-    return render(request, 'settings.html', {
+    return render(request, 'users/settings.html', {
         'github_login': github_login,
         'twitter_login': twitter_login,
         'facebook_login': facebook_login,

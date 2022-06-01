@@ -10,9 +10,6 @@ from django.views.generic import TemplateView
 import blog.views as blog_views
 from blog.sitemaps import PostSitemap
 
-
-from .views import home, send_push
-
 sitemaps = {
     "posts": PostSitemap,
 }
@@ -25,11 +22,7 @@ urlpatterns = [
     path('users/', include('users.urls', namespace='users')),
     path('summernote/', include('django_summernote.urls')),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
-    path('home', home),
     path('oauth/', include('social_django.urls', namespace='social')),
-    path('send_push', send_push),
-    path('webpush/', include('webpush.urls')),
-    path('sw.js', TemplateView.as_view(template_name='sw.js', content_type='application/x-javascript')),
 ]
 
 if settings.DEBUG:

@@ -6,20 +6,6 @@
 
 {% block content %}
 
-<style>
-  @media screen and (min-width: 600px) {
-    .children form {
-      margin-left: -48px;
-      /* will touch very left side */
-    }
-
-    .children .children form {
-      margin-left: -96px;
-      /* will touch very left side */
-    }
-  }
-</style>
-
 <div class="container">
   <div class="row justify-content-md-center pt-5">
 
@@ -34,7 +20,6 @@
     <div class="col-md-9"><img class="card-img-top" src="{{article.image.url}}" alt="{{ article.title }}"></div>
     <div class="col-md-7">
       <p>{{article.content|safe}}</p>
-    </div>
 
       <form action="{% url 'blog:article_like' article.slug %}" method="POST">
       {% csrf_token %}
@@ -45,6 +30,10 @@
       {{ article.total_likes }}
       </button>
     </form>
+    
+    </div>
+
+    
 
     <div class="col-md-7">
 

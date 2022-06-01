@@ -29,8 +29,8 @@ def addCategory(request):
 }
     return render(request,"blog/addCategory.html",context)
 
-def articles(request, slug=None, tag_slug=None):
-    articles = Article.objects.all()
+def articles(request,tag_slug=None):
+    articles = Article.objects.all().filter(status='published')
     paginator = Paginator(articles, 5)
     page = request.GET.get('page')
     tag=None

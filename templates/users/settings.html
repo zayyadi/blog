@@ -17,7 +17,7 @@
       </form>
     {% else %}
       <button type="button" disabled>Disconnect from GitHub</button>
-      <p style="color: red">You must <a href="{% url 'password' %}">define a password</a> for your account before disconnecting from Github.</p>
+      <p style="color: red">You must <a href="{% url 'users:password' %}">define a password</a> for your account before disconnecting from Github.</p>
     {% endif %}
   {% else %}
     <a href="{% url 'social:begin' 'github' %}">Connect to GitHub</a>
@@ -49,7 +49,7 @@
       </form>
     {% else %}
       <button type="button" disabled>Disconnect from Facebook</button>
-      <p style="color: red">You must <a href="{% url 'password' %}">define a password</a> for your account before disconnecting from Facebook.</p>
+      <p style="color: red">You must <a href="{% url 'users:password' %}">define a password</a> for your account before disconnecting from Facebook.</p>
     {% endif %}
   {% else %}
     <a href="{% url 'social:begin' 'facebook' %}">Connect to Facebook</a>

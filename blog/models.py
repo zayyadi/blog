@@ -6,6 +6,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.utils import timezone
+from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
 
 from django_summernote.fields import SummernoteTextField
@@ -14,6 +15,9 @@ from PIL import Image
 from taggit.managers import TaggableManager
 
 
+# class CustomUser(AbstractUser):
+#     user_type_data = ((1, "Admin"), (2, "Editor"), (3, "reader"))
+#     user_type = models.CharField(default=3, choices=user_type_data, max_length=10)
 
 def path_and_rename(instance, filename):
     upload_to = 'article_pics'

@@ -6,7 +6,7 @@ from django.dispatch import receiver
 from .models import Profile
 
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL, dispatch_uid='save_new_user_profile')
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)

@@ -1,22 +1,26 @@
 <!doctype html>
 <html lang="en">
 
+  {% load static %}
+
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Bootstrap CSS -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    {% include 'links.html' %}
+
+    <link href="{% static 'css/mediumish.css' %}" rel="stylesheet">
 
   <title>{% block title %} Welcome to blog {% endblock %}</title>
 
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  {% comment %} <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="#">Blog</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,12 +75,13 @@
           </li>
         </ul>
         {% endif %}
-        <form class="form-inline my-2 my-lg-0" action="/search/" method="get">
+    </div>
+    <form class="form-inline my-2 my-lg-0" action="/search/" method="get">
           <input class="form-control mr-sm-2" name="q" type="search" placeholder="Search" aria-label="Search" required>
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
-    </div>
-  </nav>
+    </form>
+  </nav> {% endcomment %}
+  {% include "navbar.html" %}
   {% block content %}
   {% endblock %}
   {% include 'footer.html' %}
