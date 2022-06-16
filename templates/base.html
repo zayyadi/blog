@@ -12,75 +12,18 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-    <link href="{% static 'css/mediumish.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static "fontawesome/css/all.min.css" %}"> <!-- https://fontawesome.com/ -->
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+  <link href="{% static 'css/mediumish.css' %}" rel="stylesheet">
+  <link href="{% static 'css/templatemo-xtra-blog.css' %}" rel="stylesheet">
+  {% include "links.html" %}
 
   <title>{% block title %} Welcome to blog {% endblock %}</title>
 
 </head>
 
 <body>
-  {% comment %} <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Blog</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-          </li>
-        {% if user.is_authenticated %}
-          <li class="nav-item active">
-            <a class="nav-link" href="{% url 'blog:addarticle' %}">Add article </a>
-          </li>
-          <li class="nav-item active">
-                <a href="{% url 'blog:add_category' %}" class="nav-link">
-                  Add Category
-                </a>
-              </li>
-          <li class="nav-item active">
-                <a href="{% url 'blog:dashboard' %}" class="nav-link">
-                  Dashboard
-                </a>
-              </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/search">Search</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              Categories
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="{% url "blog:articles" %}">All</a></li>
-              {% for c in category_list %}
-                <li {% if category.slug == c.slug %}class="selected" {% endif %}>
-                    <a class="dropdown-item" href="{{ c.get_absolute_url }}">{{ c.name|title }}</a>
-                </li>
-              {% endfor %}
-            </ul>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="{% url 'users:logout' %}">Logout </a>
-          </li>
-        {% else %}
-          <li class="nav-item active">
-            <a class="nav-link" href="{% url 'users:register' %}">Register </a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="{% url 'users:login' %}">Login </a>
-          </li>
-        </ul>
-        {% endif %}
-    </div>
-    <form class="form-inline my-2 my-lg-0" action="/search/" method="get">
-          <input class="form-control mr-sm-2" name="q" type="search" placeholder="Search" aria-label="Search" required>
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
-  </nav> {% endcomment %}
+  
   {% include "navbar.html" %}
   {% block content %}
   {% endblock %}
@@ -95,6 +38,8 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
   </script>
+  <script src="{% static "js/jquery.min.js" %}"></script>
+  <script src="{% static "js/templatemo-script.js" %}"></script>
 </body>
 
 </html>

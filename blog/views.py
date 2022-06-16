@@ -29,22 +29,20 @@ def addCategory(request):
 }
     return render(request,"blog/addCategory.html",context)
 
-def articles(request,tag_slug=None):
+def articles(request, slug=None):
     articles = Article.objects.all().filter(status='published')
     paginator = Paginator(articles, 5)
     page = request.GET.get('page')
-    tag=None
+    tag= None
+    if slug:
+        get_object_or_404(Tag, slug=slug)
+    # Article.tags.most_common()[:2]
     try:
         articles = paginator.page(page)
     except PageNotAnInteger:
         articles = paginator.page(1)
     except EmptyPage:
         articles = paginator.page(paginator.num_pages)
-
-    if tag_slug:
-        tag= get_object_or_404(Tag, slug=tag_slug)
-        articles = Article.objects.filter(tags__in=[tag])
-
 
     context = {
         "articles": articles,
@@ -161,10 +159,16 @@ def deleteArticle(request,slug):
 
     return redirect("blog:dashboard")
 
-def tagged(request, tags):
-    # tag = get_object_or_404(Tag, slug=slug)
-    posts = Article.objects.filter(tags=tags)
-    return render(request, 'blog/articles.html', {'tags':tags, 'posts':posts})
+def tagged(request, slug):
+    tag = get_object_or_404(Tag, slug=slug)
+    common_tags = Article.tags.most_common()[:4]
+    article = Article.objects.filter(tags=tag)
+    context = {
+        'tag':tag,
+        'common_tags':common_tags,
+        'article':article,
+    }
+    return render(request, 'article.html', context)
 
 
 def category(request, category_slug):

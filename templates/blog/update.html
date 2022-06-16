@@ -1,21 +1,25 @@
 {% extends "base.html" %}
 
-{% block body %}
+{% block content %}
 {% load crispy_forms_tags %}
 
-<div class="row">
-    <div class="col-md-6 offset-md-3">
-        <h3>Update Article</h3>
-        <hr>
-        <form method = "post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{form.media}}
-            {{form|crispy}}
-            <br>
-            <button type = "submit" class = "btn btn-danger">Update article</button>
-        </form>
-    </div>
-  </div>
+<div class="container-fluid">
+    <main class="tm-main">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h3>Update Article</h3>
+                <hr>
+                <form method = "post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{form.media}}
+                    {{form|crispy}}
+                    <br>
+                    <button type = "submit" class = "btn btn-danger">Update article</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
 
 
-{% endblock body %}
+{% endblock %}

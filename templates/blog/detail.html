@@ -7,101 +7,92 @@
 {% block content %}
 
 <div class="container">
-  <div class="row justify-content-md-center pt-5">
+  <main class="tm-main">
 
-    <div class="col-md-7">
-      <h1>{{article.title}}</h1>
-    </div>
-    <div class="text-muted">
-        <small>
-            Published {{ article.publish.date }} by <strong>{{ article.author }}</strong>
-        </small>
-    </div>
-    <div class="col-md-9"><img class="card-img-top" src="{{article.image.url}}" alt="{{ article.title }}"></div>
-    <div class="col-md-7">
-      <p>{{article.content|safe}}</p>
-
-      <form action="{% url 'blog:article_like' article.slug %}" method="POST">
-      {% csrf_token %}
-      <button type="submit" name="article_slug", value="{{ article.slug }}", class="btn btn-primary btn-sm">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-      </svg>
-      {{ article.total_likes }}
-      </button>
-    </form>
-    
-    </div>
-
-    
-
-    <div class="col-md-7">
-
-      {% with allcomments.count as total_comments %}
-      <h2>
-        {{ total_comments }} comment{{ total_comments|pluralize }}
-      </h2>
-      {% endwith %}
-
-      {% load mptt_tags %}
-
-      <div>
-        {% recursetree comments %}
-        <div id="{{ node.id }}" class="my-2 p-2" style="border: 1px solid grey">
-          <div class="d-flex justify-content-between">By {{ node.name }}<div></div>{{ node.publish }}</div>
-          <div>{{ node.content }}</div>
-          <hr />
-          {% if node.level < 3 %}
-          <button class="button" onclick="myFunction({{ node.id }})">Reply</button>
-          {% endif %}
-        </div>
-        {% if not node.is_leaf_node %}
-        <div class="children pl-2 pl-md-5">
-          {{ children }}
-        </div>
-        {% endif %}
-        {% endrecursetree %}
+    <div class="row tm-row">
+      <div class="col-12">
+          <hr class="tm-hr-primary tm-mb-55">
+          <!-- Video player 1422x800 -->
+        <img class="card-img-top" src="{{article.image.url}}" alt="{{ article.title }}">
       </div>
-
-      <div class="py-4">
-        <nav aria-label="Page navigation example">
-          {% if comments.has_other_pages %}
-          <ul class="pagination">
-            {% if comments.has_previous %}
-            <li class="page-item"><a class="page-link" href="?page={{ comments.previous_page_number }}">Previous</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-            {% endif %}
-            {% for num in comments.paginator.page_range %}
-            {% if comments.number == l %}
-            <li class="page-item active"><span class="page-link">{{ num }} <span class="sr-only">(current)</span></span>
-            </li>
-            {% else %}
-            <li><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
-            {% endif %}
-            {% endfor %}
-            {% if comments.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{ comments.next_page_number }}">Next</a></li>
-            {% else %}
-            <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
-            {% endif %}
-          </ul>
-          {% endif %}
-        </nav>
-      </div>
-
-      <div id="myDIV" style="display:block;">
-        <form id="myForm" method="post">
-          <h2>Create new comment</h2>
-          {{ comment_form.as_p }}
-          {% csrf_token %}
-          <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
-        </form>
-      </div>
-
     </div>
-  </div>
+    <div class="row tm-row">
+      <div class="col-lg-8 tm-post-col">
+          <div class="tm-post-full">
+              <div class="mb-4">
+                <h2 class="pt-2 tm-color-primary tm-post-title">{{article.title}}</h2>
+                <p class="tm-mb-40">Published {{ article.publish.date }} by <strong>{{ article.author }}</strong></p>
+                <p>{{article.content|safe}}</p>
+                <form action="{% url 'blog:article_like' article.slug %}" method="POST">
+                  {% csrf_token %}
+                  <button type="submit" name="article_slug", value="{{ article.slug }}", class="btn btn-primary btn-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                  </svg>
+                  {{ article.total_likes }}
+                  </button>
+                </form>
+              </div>
+              <div>
+                {% with allcomments.count as total_comments %}
+                <h2 class="tm-color-primary tm-post-title">{{ total_comments }} comment{{ total_comments|pluralize }}</h2>
+                {% endwith %}
+
+                {% load mptt_tags %}
+
+                {% recursetree comments %}
+                <hr class="tm-hr-primary tm-mb-45">
+                <div id="{{ node.id }}" class="tm-comment tm-mb-45">
+                  
+                    <figure class="tm-comment-figure">
+                        <figcaption class="tm-color-primary text-center">By {{ node.name }}</figcaption>
+                    </figure>
+                    <div>
+                      <p>
+                         {{ node.body }}
+                      </p>
+                      <hr />
+                    </div>
+                      <div class="d-flex justify-content-between">
+                        {% if node.level < 3 %}
+                        <button onclick="myFunction({{ node.id }})" class="tm-color-primary">REPLY</button>
+                        <span class="tm-color-primary">June 14, 2020</span>
+                        {% endif %}
+                      </div>
+                </div>
+                      
+                <div class="children pl-2 pl-md-5">
+                  {% if not node.is_leaf_node %}
+                  {{ children }}
+                  {% endif %}
+                  {% endrecursetree %}
+                </div>
+                <br>
+              <div id="myForm" >
+                <form method="post" class="mb-5 tm-comment-form">
+                  <h2 class="tm-color-primary tm-post-title mb-4">Your comment</h2>
+                  {{ comment_form.as_p }}
+                  {% csrf_token %}
+                  <div class="text-right">
+                      <button class="tm-btn tm-btn-primary tm-btn-small">Submit</button>
+                  </div>
+                </form>
+              </div>
+          </div>
+      </div>
+      <aside class="col-lg-4 tm-aside-col">
+          <div class="tm-post-sidebar">  
+              <hr class="mb-3 tm-hr-primary">
+              <h2 class="mb-4 tm-post-title tm-color-primary">Similar Posts</h2>
+              {% for similar in  similar_posts %}
+              <ul class="tm-mb-75 pl-5 tm-category-list">
+                  <li><a href="{{similar.get_absolute_url}}" class="tm-color-primary">{{similar.snippet|truncatechars:50}}</a></li>
+              </ul>
+              {% endfor %}
+          </div>
+      </aside>
+    </div>
+  </main>
 </div>
 <script>
   function formExit() {
@@ -137,3 +128,105 @@
 </script>
 
 {% endblock %}
+
+
+      
+
+      
+    
+    {% comment %} </div>
+
+    
+
+    <div class="col-md-7">
+
+      {% with allcomments.count as total_comments %}
+      <h2>
+        {{ total_comments }} comment{{ total_comments|pluralize }}
+      </h2>
+      {% endwith %}
+
+      {% load mptt_tags %} {% endcomment %}
+
+      {% comment %} <div>
+        {% recursetree comments %}
+        <div id="{{ node.id }}" class="my-2 p-2" style="border: 1px solid grey">
+          <div class="d-flex justify-content-between">By {{ node.name }}<div></div>{{ node.publish }}</div>
+          <div>{{ node.content }}</div>
+          <hr />
+          {% if node.level < 3 %}
+          <button class="button" onclick="myFunction({{ node.id }})">Reply</button>
+          {% endif %}
+        </div>
+        {% if not node.is_leaf_node %}
+        <div class="children pl-2 pl-md-5">
+          {{ children }}
+        </div>
+        {% endif %}
+        {% endrecursetree %}
+      </div> {% endcomment %}
+
+      {% comment %} <div class="py-4">
+        <nav aria-label="Page navigation example">
+          {% if comments.has_other_pages %}
+          <ul class="pagination">
+            {% if comments.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ comments.previous_page_number }}">Previous</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+            {% endif %}
+            {% for num in comments.paginator.page_range %}
+            {% if comments.number == l %}
+            <li class="page-item active"><span class="page-link">{{ num }} <span class="sr-only">(current)</span></span>
+            </li>
+            {% else %}
+            <li><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if comments.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ comments.next_page_number }}">Next</a></li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+            {% endif %}
+          </ul>
+          {% endif %}
+        </nav>
+      </div>
+    
+
+      <div id="myDIV" style="display:block;">
+        <form id="myForm" method="post">
+          <h2>Create new comment</h2>
+          {{ comment_form.as_p }}
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+        </form>
+      </div> {% endcomment %}
+
+
+
+
+
+
+
+      {% comment %} <hr class="mb-3 tm-hr-primary">
+      <h2 class="tm-mb-40 tm-post-title tm-color-primary">Related Posts</h2>
+      <a href="#" class="d-block tm-mb-40">
+          <figure>
+              <img src="img/img-02.jpg" alt="Image" class="mb-3 img-fluid">
+              <figcaption class="tm-color-primary">Duis mollis diam nec ex viverra scelerisque a sit</figcaption>
+          </figure>
+      </a>
+      <a href="#" class="d-block tm-mb-40">
+          <figure>
+              <img src="img/img-05.jpg" alt="Image" class="mb-3 img-fluid">
+              <figcaption class="tm-color-primary">Integer quis lectus eget justo ullamcorper ullamcorper</figcaption>
+          </figure>
+      </a>
+      <a href="#" class="d-block tm-mb-40">
+          <figure>
+              <img src="img/img-06.jpg" alt="Image" class="mb-3 img-fluid">
+              <figcaption class="tm-color-primary">Nam lobortis nunc sed faucibus commodo</figcaption>
+          </figure>
+      </a> {% endcomment %}

@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="container-fluid">
+  <main class="tm-main">
 <h3>Control Panel</h3>
 <hr>
 <p>
@@ -37,6 +39,8 @@
         </tbody>
       </table>
 {% else %}
+  </main>
+</div>
 
 <div class = "alert alert-danger">   
 You don't have any articles yet...

@@ -85,6 +85,12 @@ class Article(models.Model):
 
         return reverse("blog:detail",args=[self.slug])
 
+    def get_tags(self):
+        """ names() is a django-taggit method, returning a ValuesListQuerySet 
+        (basically just an iterable) containing the name of each tag as a string
+        """
+        return self.tags.names()
+
     def get_comments(self):
         return self.comments.filter(parent=None).filter(active=True)
 

@@ -1,0 +1,37 @@
+{% load static %}
+{% include 'links.html' %}
+
+
+
+    <!-- Pills navs -->
+
+    <!-- Pills content -->
+    <div class="tab-content">
+    <div
+        class="tab-pane fade show active"
+        id="pills-login"
+        role="tabpanel"
+        aria-labelledby="tab-login"
+    >
+        <form>
+        <div class="text-center mb-3">
+            <p>Sign in with:</p>
+            <a href="{% url 'social:begin' 'facebook' %}"
+                <button type="button" class="btn btn-primary btn-floating mx-1">
+                <i class="fab fa-facebook-f"></i>
+                </button>
+            </a>
+            <a href="{% url 'social:begin' 'twitter' %}"
+                <button type="button" class="btn btn-primary btn-floating mx-1">
+                <i class="fab fa-twitter"></i>
+                </button>
+            </a>
+
+            <a href="{% url 'social:begin' 'github' %}"
+            <button type="button" class="btn btn-primary btn-floating mx-1">
+            <i class="fab fa-github"></i>
+            </button>
+            </a>
+        </div>
+    </div>
+</div> 

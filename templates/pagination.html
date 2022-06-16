@@ -1,4 +1,32 @@
-<div class="">
+{% load static %}
+<div class="row tm-row tm-mt-100 tm-mb-75">
+    <div class="tm-prev-next-wrapper">
+        {% if page.has_previous %}
+            <a href="?page={{ page.previous_page_number}}" class="mb-2 tm-btn tm-btn-primary tm-prev-next disabled tm-mr-20">Prev</a>
+        {% endif %}
+        {% if page.has_next %}
+        <a href="?page={{ page.next_page_number}}" class="mb-2 tm-btn tm-btn-primary tm-prev-next">Next</a>
+        {% endif %}
+    </div>
+    <div class="tm-paging-wrapper">
+        <span class="d-inline-block mr-3">Page</span>
+        <nav class="tm-paging-nav d-inline-block">
+            <ul>
+                <li class="tm-paging-item active">
+                    Page {{ page.number }} of {{ page.paginator.num_pages }}.
+                </li>
+                {% for page in page.paginator.pages_range %}
+                    <li class="tm-paging-item">
+                        <a href="?page={{ page }}" class="mb-2 tm-btn tm-paging-link">{{ page }}</a>
+                    </li>
+                {% endfor %} 
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+{% comment %} <div class="">
     <span class="">
     {% if page.has_previous %}
     <a href="?page={{ page.previous_page_number}}">Previous</a>
@@ -12,4 +40,4 @@
     <a href="?page={{ page.next_page_number}}"> Next</a>
     {% endif %}
     </span>
-</div>
+</div> {% endcomment %}

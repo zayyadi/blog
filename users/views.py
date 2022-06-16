@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponseRedirect
+from django.shortcuts import render, redirect, HttpResponseRedirect, get_object_or_404
 
 from .forms import ProfileUpdateForm, UserUpdateForm, UserCreationForm,UserRegisterForm
 from django.contrib import messages
@@ -21,11 +21,30 @@ def register(request):
             form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f'Your account has been created! You are now able to log in')
-            return redirect('login')
+            return redirect('users:login')
     else:
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
 
+
+# def login_request(request):
+
+# 	if request.method == "POST":
+# 		form = AuthenticationForm(request)
+# 		if form.is_valid():
+# 			username = form.cleaned_data.get('username')
+# 			password = form.cleaned_data.get('password')
+# 			user = authenticate(request, username=username, password=password)
+# 			if user is not None:
+# 				login(request, user)
+# 				messages.info(request, f"You are now logged in as {username}.")
+# 				return redirect("blog:articles")
+# 			else:
+# 				messages.error(request,"Invalid username or password.")
+# 		else:
+# 			messages.error(request,"Invalid username or password.")
+# 	form = AuthenticationForm()
+# 	return render(request=request, template_name="users/login.html", context={"login_form":form})
 
 """ def login(request):
 
@@ -69,6 +88,11 @@ def profile(request):
     }
 
     return render(request, 'users/profile.html', context)
+
+@login_required
+def view_profile(request, user_id):
+    user = get_object_or_404(Profile, user_id=user_id)
+    return render(request, 'users/view_profile.html', {'user': user})
 
 @login_required
 def settings(request):

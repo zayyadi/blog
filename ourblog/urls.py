@@ -18,7 +18,9 @@ sitemaps = {
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('debug/', include(debug_toolbar.urls)),
+    path('api-auth/', include('rest_framework.urls')),
     path('', include('blog.urls', namespace='blog')),
+    path('api/', include('blog_api.urls', namespace='blog_api')),
     path('users/', include('users.urls', namespace='users')),
     path('summernote/', include('django_summernote.urls')),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),

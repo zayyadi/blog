@@ -1,17 +1,13 @@
 import os
 from pathlib import Path
 
-import environ
 
-# Initialise environment variables
-env = environ.Env()
-environ.Env.read_env()
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 
 DEBUG = True
@@ -33,11 +29,10 @@ INSTALLED_APPS = [
     'blog',
     'mptt',
     'taggit',
-    'django_extensions',
-    'rest_framework',
     'django_social_share',
-    'webpush',
     'users',
+    'rest_framework',
+    'blog_api',
 ]
 
 INSTALLED_APPS += ('django_summernote', )
@@ -108,7 +103,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'ourblog', 
         'USER': 'postgres', 
-        'PASSWORD': env('PASSWORD'),
+        'PASSWORD': os.environ.get('PASSWORD'),
         'HOST': '127.0.0.1', 
         'PORT': '5432',
     }
@@ -158,7 +153,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
-LOGIN_REDIRECT_URL = ''
+LOGIN_REDIRECT_URL = 'blog:articles'
 LOGIN_URL = 'users:login'
 ACCOUNT_LOGOUT_REDIRECT_URL ='users:logout'
 SUMMERNOTE_THEME = 'bs4'
@@ -166,11 +161,11 @@ SUMMERNOTE_THEME = 'bs4'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 SOCIAL_AUTH_LOGIN_ERROR_URL = 'users:settings'
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'users:settings'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'blog:articles'
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 
-SOCIAL_AUTH_GITHUB_KEY = env('client_id')
-SOCIAL_AUTH_GITHUB_SECRET = env('client_secret')
+SOCIAL_AUTH_GITHUB_KEY = os.environ.get('client_id')
+SOCIAL_AUTH_GITHUB_SECRET = os.environ.get('client_secret')
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
@@ -179,5 +174,13 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.mailtrap.io'
 EMAIL_PORT = 2525
-EMAIL_HOST_USER = env('EMAIL')
-EMAIL_HOST_PASSWORD = env('PASS')
+EMAIL_HOST_USER = os.environ.get('EMAIL')
+EMAIL_HOST_PASSWORD = os.environ.get('PASS')
+
+# REST_FRAMEWORK = {
+#     # Use Django's standard `django.contrib.auth` permissions,
+#     # or allow read-only access for unauthenticated users.
+#     # 'DEFAULT_PERMISSION_CLASSES': [
+#     #     'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+#     ]
+# }
