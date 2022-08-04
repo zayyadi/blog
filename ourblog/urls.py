@@ -7,6 +7,8 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 from django.views.generic import TemplateView
 
+from rest_framework.authtoken import views
+
 import blog.views as blog_views
 from blog.sitemaps import PostSitemap
 
@@ -19,6 +21,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('debug/', include(debug_toolbar.urls)),
     path('api-auth/', include('rest_framework.urls')),
+    path('api-token-auth/', views.obtain_auth_token),
+    path(r'api/auth/', include('knox.urls')),
     path('', include('blog.urls', namespace='blog')),
     path('api/', include('blog_api.urls', namespace='blog_api')),
     path('users/', include('users.urls', namespace='users')),

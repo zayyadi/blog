@@ -92,7 +92,7 @@ def addArticle(request):
 def detail(request,post):
     #article = Article.objects.filter(id = id).first()   
     article = get_object_or_404(Article, slug=post, status='published')
-    allcomments = article.comments.filter(status=True)
+    allcomments = article.comments.filter(active=True)
     page = request.GET.get('page', 1)
 
     paginator = Paginator(allcomments, 10)
@@ -106,7 +106,7 @@ def detail(request,post):
     similar_posts = Article.objects.filter(tags__in=article_tags).exclude(id=article.id)
     similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags','-publish')[:3]
 
-    comments = article.comments.filter(status=True)
+    comments = article.comments.filter(active=True)
 
     user_comment = None
 

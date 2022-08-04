@@ -109,8 +109,6 @@ class Comment(MPTTModel):
     publish = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
     email = models.EmailField(default= "wk@example.com")
-    status = models.BooleanField(default=True)
-    
 
     class MPTTMeta:
         order_insertion_by = ['publish']
