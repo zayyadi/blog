@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from rest_framework.settings import api_settings
+# from rest_framework.settings import api_settings
 
 from datetime import timedelta
 
@@ -12,7 +12,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
-    "debug_toolbar",
+    # "debug_toolbar",
     "crispy_forms",
     "social_django",
     "blog",
@@ -33,16 +33,15 @@ INSTALLED_APPS = [
     "taggit",
     "django_social_share",
     "users",
-    "blog_api",
-    "import_export",
+    # "import_export",
     # DRF settings
-    "rest_framework",
-    "rest_framework.authtoken",
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.github",
-    "knox",
+    # "rest_framework",
+    # "rest_framework.authtoken",
+    # "allauth",
+    # "allauth.account",
+    # "allauth.socialaccount",
+    # "allauth.socialaccount.providers.github",
+    # "knox",
 ]
 
 INSTALLED_APPS += ("django_summernote",)
@@ -65,7 +64,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "social_django.middleware.SocialAuthExceptionMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    # "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "ourblog.urls"
@@ -90,20 +89,20 @@ TEMPLATES = [
 ]
 
 
-DEBUG_TOOLBAR_PANELS = [
-    "debug_toolbar.panels.versions.VersionsPanel",
-    "debug_toolbar.panels.timer.TimerPanel",
-    "debug_toolbar.panels.settings.SettingsPanel",
-    "debug_toolbar.panels.headers.HeadersPanel",
-    "debug_toolbar.panels.request.RequestPanel",
-    "debug_toolbar.panels.sql.SQLPanel",
-    "debug_toolbar.panels.staticfiles.StaticFilesPanel",
-    "debug_toolbar.panels.templates.TemplatesPanel",
-    "debug_toolbar.panels.cache.CachePanel",
-    "debug_toolbar.panels.signals.SignalsPanel",
-    "debug_toolbar.panels.logging.LoggingPanel",
-    "debug_toolbar.panels.redirects.RedirectsPanel",
-]
+# DEBUG_TOOLBAR_PANELS = [
+#     "debug_toolbar.panels.versions.VersionsPanel",
+#     "debug_toolbar.panels.timer.TimerPanel",
+#     "debug_toolbar.panels.settings.SettingsPanel",
+#     "debug_toolbar.panels.headers.HeadersPanel",
+#     "debug_toolbar.panels.request.RequestPanel",
+#     "debug_toolbar.panels.sql.SQLPanel",
+#     "debug_toolbar.panels.staticfiles.StaticFilesPanel",
+#     "debug_toolbar.panels.templates.TemplatesPanel",
+#     "debug_toolbar.panels.cache.CachePanel",
+#     "debug_toolbar.panels.signals.SignalsPanel",
+#     "debug_toolbar.panels.logging.LoggingPanel",
+#     "debug_toolbar.panels.redirects.RedirectsPanel",
+# ]
 
 WSGI_APPLICATION = "ourblog.wsgi.application"
 
@@ -111,8 +110,8 @@ WSGI_APPLICATION = "ourblog.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "ourblog",
-        "USER": "postgres",
+        "NAME": os.environ.get("NAME"),
+        "USER": os.environ.get("DB_USER"),
         "PASSWORD": os.environ.get("PASSWORD"),
         "HOST": "127.0.0.1",
         "PORT": "5432",
@@ -158,10 +157,10 @@ USE_TZ = True
 
 
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "static"),
+# ]
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 
@@ -170,6 +169,7 @@ LOGIN_URL = "users:login"
 ACCOUNT_LOGOUT_REDIRECT_URL = "users:logout"
 SUMMERNOTE_THEME = "bs4"
 
+MEDIA_URL = "/media/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 SOCIAL_AUTH_LOGIN_ERROR_URL = "users:settings"
@@ -182,29 +182,29 @@ SOCIAL_AUTH_GITHUB_SECRET = os.environ.get("client_secret")
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_USE_TLS = True
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ.get("EMAIL")
-EMAIL_HOST_PASSWORD = os.environ.get("PASS")
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = "smtp.gmail.com"
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = os.environ.get("EMAIL")
+# EMAIL_HOST_PASSWORD = os.environ.get("PASS")
 
 
 # DRF settings
 
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.TokenAuthentication",
-    )
-}
+# """ REST_FRAMEWORK = {
+#     "DEFAULT_AUTHENTICATION_CLASSES": (
+#         "rest_framework.authentication.TokenAuthentication",
+#     )
+# }
 
 
-REST_KNOX = {
-    "SECURE_HASH_ALGORITHM": "cryptography.hazmat.primitives.hashes.SHA512",
-    "AUTH_TOKEN_CHARACTER_LENGTH": 64,
-    "TOKEN_TTL": timedelta(hours=10),
-    "USER_SERIALIZER": "knox.serializers.UserSerializer",
-    "TOKEN_LIMIT_PER_USER": None,
-    "AUTO_REFRESH": False,
-    "EXPIRY_DATETIME_FORMAT": api_settings.DATETIME_FORMAT,
-}
+# REST_KNOX = {
+#     "SECURE_HASH_ALGORITHM": "cryptography.hazmat.primitives.hashes.SHA512",
+#     "AUTH_TOKEN_CHARACTER_LENGTH": 64,
+#     "TOKEN_TTL": timedelta(hours=10),
+#     "USER_SERIALIZER": "knox.serializers.UserSerializer",
+#     "TOKEN_LIMIT_PER_USER": None,
+#     "AUTO_REFRESH": False,
+#     "EXPIRY_DATETIME_FORMAT": api_settings.DATETIME_FORMAT,
+# } """

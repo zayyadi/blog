@@ -2,15 +2,10 @@ from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
 from mptt.admin import MPTTModelAdmin
 
-from import_export import resources
-from import_export.admin import ImportExportModelAdmin
+# from import_export import resources
+# from import_export.admin import ImportExportModelAdmin
 
 from .models import Article, Category, Comment
-
-class ArticleResource(resources.ModelResource):
-
-    class Meta:
-        models= Article
 
 class PostAdmin(SummernoteModelAdmin):
     list_display = ('title', 'author', 'status', 'publish')
@@ -31,6 +26,6 @@ class PostAdmin(SummernoteModelAdmin):
 #         queryset.update(active=True)
 
 
-admin.site.register(Article, ImportExportModelAdmin)
+admin.site.register(Article)
 admin.site.register(Category)
 admin.site.register(Comment, MPTTModelAdmin)

@@ -6,3 +6,6 @@
 *.gitignore
 *.ipynb
 *.ipynb_checkpoints
+*app.sock
+__pycache__
+*__pycache__
