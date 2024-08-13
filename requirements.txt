@@ -49,7 +49,7 @@ requests==2.31.0
 simplejson==3.16.0
 six==1.14.0
 sos==4.3
-Twisted==23.10.0
+Twisted==24.7.0
 urllib3==1.26.18
 virtualenv==20.16.5
 zipp==1.0.0
