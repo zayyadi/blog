@@ -1,9 +1,6 @@
 import os
-from pathlib import Path
 
 # from rest_framework.settings import api_settings
-
-from datetime import timedelta
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -12,7 +9,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -26,9 +23,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     # "debug_toolbar",
-    "crispy_forms",
     "social_django",
     "blog",
+    "crispy_forms",
+    "crispy_bootstrap5",
     "mptt",
     "taggit",
     "django_social_share",
@@ -89,21 +87,6 @@ TEMPLATES = [
 ]
 
 
-# DEBUG_TOOLBAR_PANELS = [
-#     "debug_toolbar.panels.versions.VersionsPanel",
-#     "debug_toolbar.panels.timer.TimerPanel",
-#     "debug_toolbar.panels.settings.SettingsPanel",
-#     "debug_toolbar.panels.headers.HeadersPanel",
-#     "debug_toolbar.panels.request.RequestPanel",
-#     "debug_toolbar.panels.sql.SQLPanel",
-#     "debug_toolbar.panels.staticfiles.StaticFilesPanel",
-#     "debug_toolbar.panels.templates.TemplatesPanel",
-#     "debug_toolbar.panels.cache.CachePanel",
-#     "debug_toolbar.panels.signals.SignalsPanel",
-#     "debug_toolbar.panels.logging.LoggingPanel",
-#     "debug_toolbar.panels.redirects.RedirectsPanel",
-# ]
-
 WSGI_APPLICATION = "ourblog.wsgi.application"
 
 
@@ -157,12 +140,17 @@ USE_TZ = True
 
 
 STATIC_URL = "/static/"
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, "static"),
-# ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "staticfiles"),
+]
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
-CRISPY_TEMPLATE_PACK = "bootstrap4"
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+
+AUTH_USER_MODEL = "users.CustomUser"
+AUTH_USER_DEFAULT_GROUP = "blog-members"
 
 LOGIN_REDIRECT_URL = "blog:articles"
 LOGIN_URL = "users:login"
@@ -181,30 +169,18 @@ SOCIAL_AUTH_GITHUB_SECRET = os.environ.get("client_secret")
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.mailtrap.io"
+EMAIL_HOST_USER = os.environ.get("EMAIL_USERNAME")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
+EMAIL_PORT = os.environ.get("EMAIL_PORT")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True")
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
+EMAIL_FILE_PATH = os.getenv("EMAIL_FILE_PATH", os.path.join(BASE_DIR, "test-emails"))
 
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# EMAIL_USE_TLS = True
-# EMAIL_HOST = "smtp.gmail.com"
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = os.environ.get("EMAIL")
-# EMAIL_HOST_PASSWORD = os.environ.get("PASS")
+EMAIL_USE_SSL: False
 
-
-# DRF settings
-
-# """ REST_FRAMEWORK = {
-#     "DEFAULT_AUTHENTICATION_CLASSES": (
-#         "rest_framework.authentication.TokenAuthentication",
-#     )
-# }
-
-
-# REST_KNOX = {
-#     "SECURE_HASH_ALGORITHM": "cryptography.hazmat.primitives.hashes.SHA512",
-#     "AUTH_TOKEN_CHARACTER_LENGTH": 64,
-#     "TOKEN_TTL": timedelta(hours=10),
-#     "USER_SERIALIZER": "knox.serializers.UserSerializer",
-#     "TOKEN_LIMIT_PER_USER": None,
-#     "AUTO_REFRESH": False,
-#     "EXPIRY_DATETIME_FORMAT": api_settings.DATETIME_FORMAT,
-# } """
+SITE_TITLE = os.getenv("SITE_TITLE", "Demo Site")
+SITE_TAGLINE = os.getenv("SITE_TAGLINE", "Demo Site")
+SITE_DESCRIPTION = "SITE_DESCRIPTION"
+SITE_LOGO = os.getenv("SITE_LOGO", "http://localhost:8001/static/logo.png")

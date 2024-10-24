@@ -1,8 +1,11 @@
-from base64 import urlsafe_b64decode
+from django import views
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.sites.shortcuts import get_current_site
 
-from .forms import ProfileUpdateForm, UserUpdateForm, UserRegisterForm
+# from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse, reverse_lazy
+from ourblog import settings
+
+from .forms import SignUpForm
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash, logout
 from django.contrib.auth.decorators import login_required
@@ -11,92 +14,62 @@ from users.models import Profile
 from django.http import JsonResponse
 from social_django.models import UserSocialAuth
 from django.contrib.auth.models import User
-# from django.utils.encoding import force_bytes, force_str
-# from django.utils.http import urlsafe_base64_encode
-# from django.template.loader import render_to_string
-# from .token import account_activation_token
-from django.contrib.auth import get_user_model
-from django.core.mail import EmailMessage
-from django.http import HttpResponse
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 
 
-def register(request):
-    if request.method == "POST":
-        form = UserRegisterForm(request.POST)
+class RegisterView(views.View):
+    def get(self, request):
+        return render(request, "registration/register.html", {"form": SignUpForm()})
+
+    def post(self, request):
+        form = SignUpForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.is_active = False
             form.save()
-            # current_site = get_current_site(request)
-            # mail_subject = "Activation link has been sent to your email id"
-            # message = render_to_string(
-            #     "acc_active_email.html",
-            #     {
-            #         "user": user,
-            #         "domain": current_site.domain,
-            #         "uid": urlsafe_base64_encode(force_bytes(user.pk)),
-            #         "token": account_activation_token.make_token(user),
-            #     },
-            # )
-            # to_email = form.cleaned_data.get("email")
-            # email = EmailMessage(mail_subject, message, to=[to_email])
-            # email.send()
-            # email.send()
-            # return HttpResponse(
-            #     "Please confirm your email address to complete the registration"
-            # )
-    else:
-        form = UserRegisterForm()
-    return render(request, "users/register.html", {"form": form})
+
+            return redirect(reverse("users:login"))
+
+        return render(request, "register.html", {"form": form})
 
 
-def activate(request, uidb64, token):
-    User = get_user_model()
-    try:
-        uid = force_str(urlsafe_b64decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save()
-        return HttpResponse(
-            "Thank you for your email confirmation. Now you can login your account."
-        )
-    else:
-        return HttpResponse("Activation link is invalid!")
+class MyLoginView(LoginView):
+    def get_success_url(self):
+        redirect_url = self.request.GET.get("next")
+        if redirect_url:
+            return redirect_url
 
-
-def logout_view(request):
-    logout(request)
-    return render(request, "users/logout.html")
+        return reverse("payroll:index")
 
 
 def social(request):
     return render(request, "users/social.html")
 
 
-@login_required
-def profile(request):
-    created = Profile.objects.get_or_create(user=request.user)
-    if request.method == "POST":
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(
-            request.POST, request.FILES, instance=request.user.profile
-        )
-        if u_form.is_valid() and p_form.is_valid():
-            u_form.save()
-            p_form.save()
-            messages.success(request, f"Your account has been updated!")
-            return redirect("users:profile")
+# @login_required
+# def profile(request):
+#     created = Profile.objects.get_or_create(user=request.user)
+#     if request.method == "POST":
+#         u_form = UserUpdateForm(request.POST, instance=request.user)
+#         p_form = ProfileUpdateForm(
+#             request.POST, request.FILES, instance=request.user.profile
+#         )
+#         if u_form.is_valid() and p_form.is_valid():
+#             u_form.save()
+#             p_form.save()
+#             messages.success(request, f"Your account has been updated!")
+#             return redirect("users:profile")
 
-    else:
-        u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.profile)
+#     else:
+#         u_form = UserUpdateForm(instance=request.user)
+#         p_form = ProfileUpdateForm(instance=request.user.profile)
 
-    context = {"u_form": u_form, "p_form": p_form}
+#     context = {"u_form": u_form, "p_form": p_form}
 
-    return render(request, "users/profile.html", context)
+#     return render(request, "users/profile.html", context)
 
 
 @login_required
@@ -106,7 +79,7 @@ def view_profile(request, user_id):
 
 
 @login_required
-def settings(request):
+def setting(request):
     user = request.user
 
     try:
@@ -164,3 +137,76 @@ def validate_username(request):
     username = request.GET.get("username", None)
     response = {"is_taken": User.objects.filter(username__iexact=username).exists()}
     return JsonResponse(response)
+
+
+class CustomPasswordResetView(PasswordResetView):
+    email_template_name = "registration/password_reset_email.html"
+    success_url = reverse_lazy("users:password_reset_done")
+
+    def send_mail(
+        self,
+        subject_template_name,
+        email_template_name,
+        context,
+        from_email,
+        to_email,
+        html_email_template_name=None,
+    ):
+        # Access the user instance and include it in the context
+        context["user"] = self.user
+        super().send_mail(
+            subject_template_name,
+            email_template_name,
+            context,
+            from_email,
+            to_email,
+            html_email_template_name,
+        )
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        uidb64 = urlsafe_base64_encode(force_bytes(self.user.id))
+        token = self.object.token
+        reset_url = reverse(
+            "users:password_reset_confirm", kwargs={"uidb64": uidb64, "token": token}
+        )
+        email_body = render_to_string(
+            "registration/password_reset_email.html",
+            {
+                "protocol": "http",  # or 'https' depending on your setup
+                "domain": "127.0.0.1",  # replace with your actual domain
+                "uidb64": uidb64,
+                "token": token,
+                "reset_url": reset_url,
+                "user": self.user,  # include the user instance in the context
+            },
+        )
+        send_mail(
+            "Password Reset", email_body, settings.DEFAULT_FROM_EMAIL, [self.user.email]
+        )
+        messages.success(self.request, "Password reset email sent successfully.")
+        return response
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    success_url = reverse_lazy("users:password_reset_complete")
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "Password successfully reset.")
+        return response
+
+
+def custom_password_reset_done(request):
+    # Your custom password reset done view logic
+    return render(request, "registration/password_reset_done.html")
+
+
+def custom_password_reset_complete(request):
+    # Your custom password reset complete view logic
+    return render(request, "registration/password_reset_complete.html")
+
+
+def logout_view(request):
+    logout(request)
+    return render(request, "registration/logout.html")
