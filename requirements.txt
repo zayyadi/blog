@@ -8,7 +8,7 @@ crispy-bootstrap5==2023.10
 cryptography==43.0.1
 defusedxml==0.8.0rc2
 diff-match-patch==20241021
-Django==4.2.7
+Django==4.2.16
 django-admin-interface==0.29.1
 django-bootstrap3==23.4
 django-bootstrap4==23.2
