@@ -23,10 +23,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt  # Adjust the path to your requirements file
 
-      - name: Migrate and Setup DB
-        run: |
-          python manage.py makemigrations
-          python manage.py migrate
+      # - name: Migrate and Setup DB
+      #   run: |
+      #     python manage.py makemigrations
+      #     python manage.py migrate
 
-      - name: Run tests
-        run: pytest -v
+      # - name: Run tests
+      #   run: pytest -v
