@@ -9,3 +9,8 @@
 *app.sock
 __pycache__
 *__pycache__
+settings.json
+base.py
+.pytest_cache
+staticfiles
+text.txt

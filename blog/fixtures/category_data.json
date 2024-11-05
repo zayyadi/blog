@@ -1,0 +1,18 @@
+[
+  {
+    "model": "blog.Category",
+    "pk": 1,
+    "fields": {
+      "name": "Name-1",
+      "slug": "xfwur"
+    }
+  },
+  {
+    "model": "blog.Category",
+    "pk": 2,
+    "fields": {
+      "name": "Name-2",
+      "slug": "fgkpu"
+    }
+  }
+]

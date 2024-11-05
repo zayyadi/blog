@@ -1,12 +1,12 @@
-{% load tailwind_tags %}
+{% load static tailwind_tags %}
 {% load static %}
-
-{% tailwind_preload_css %}
 {% tailwind_css %}
+
+{% include 'navbar.html' %}
 
 
 <div class="min-h-screen flex items-center justify-center bg-gray-900">
-  <div class="max-w-md w-full space-y-8 p-8 bg-gray-800 shadow-md rounded-lg">
+  <div class="max-w-md w-full space-y-8 p-8 bg-gray-900 shadow-md rounded-lg">
     <h2 class="text-3xl font-semibold text-center text-gray-200">Login</h2>
     
     <form method="post" action="{% url 'users:login' %}" class="mt-8">
@@ -43,7 +43,7 @@
 
     <div>
       <button class="w-full bg-blue-400 text-white p-2 rounded-lg shadow-lg hover:bg-white-400 focus:outline-none focus:ring focus:border-white-400">
-        <a href="{% url 'users:socials' %}">Login WIth SOCIALS</a>
+        <a href="{% url 'users:social' %}">Login WIth SOCIALS</a>
       </button>
     </div>
     

@@ -5,11 +5,11 @@ from django.contrib import admin
 
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
-from django.views.generic import TemplateView
+
 
 # from rest_framework.authtoken import views
 
-import blog.views as blog_views
+# import blog.views as blog_views
 from blog.sitemaps import PostSitemap
 
 sitemaps = {

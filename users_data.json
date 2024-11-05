@@ -1,0 +1,28 @@
+[
+  {
+    "model": "users.CustomUser",
+    "pk": 1,
+    "fields": {
+      "email": "4f7514ea2fa514de@example.com",
+      "first_name": "John",
+      "last_name": "Doe",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-01-01T00:00:00Z",
+      "password": "4f7514ea2fa514de"
+    }
+  },
+  {
+    "model": "users.CustomUser",
+    "pk": 2,
+    "fields": {
+      "email": "bc64c66b53ce4ff9@example.com",
+      "first_name": "John",
+      "last_name": "Doe",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-01-01T00:00:00Z",
+      "password": "bc64c66b53ce4ff9"
+    }
+  }
+]

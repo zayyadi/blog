@@ -45,6 +45,11 @@ class Category(models.Model):
 
 
 class Article(models.Model):
+
+    class UnpublishedManager(models.Manager):
+        def get_queryset(self) -> models.QuerySet:
+            return super().get_queryset().filter(status="draft")
+
     class NewManager(models.Manager):
         def get_queryset(self):
             return super().get_queryset().filter(status="published")
@@ -71,12 +76,19 @@ class Article(models.Model):
         blank=True,
         related_name="likes",
     )
+    objects = models.Manager()
+    unpublished = UnpublishedManager()
     snippet = models.CharField(max_length=255)
 
     def total_likes(self):
         return self.likes.count()
 
     class Meta:
+        permissions = [
+            ("can_publish", "Can publish posts"),
+            ("can_edit", "Can edit posts"),
+            ("can_view", "Can view posts"),
+        ]
         ordering = ["-publish"]
 
     def __str__(self):
@@ -116,8 +128,9 @@ class Comment(MPTTModel):
     class MPTTMeta:
         order_insertion_by = ["publish"]
 
-    def get_comments(self):
-        return Comment.objects.filter(parent=self).filter(active=True)
+    # def get_comments(self):
+    #     """Retrieve only active comments that are direct replies to this comment."""
+    #     return self.get_children().filter(active=True)
 
     def __str__(self):
         return f"Comment {self.body} by {self.name}"

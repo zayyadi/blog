@@ -34,6 +34,12 @@ class ArticleForm(forms.ModelForm):
         }
 
 
+class ApprovalForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = ("status",)
+
+
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category

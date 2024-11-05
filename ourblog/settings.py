@@ -15,6 +15,8 @@ ALLOWED_HOSTS = ["*"]
 
 
 INSTALLED_APPS = [
+    "admin_interface",
+    "colorfield",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -22,6 +24,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    "tailwind",
+    "theme",
+    "import_export",
     # "debug_toolbar",
     "social_django",
     "blog",
@@ -31,15 +36,6 @@ INSTALLED_APPS = [
     "taggit",
     "django_social_share",
     "users",
-    # "import_export",
-    # DRF settings
-    # "rest_framework",
-    # "rest_framework.authtoken",
-    # "allauth",
-    # "allauth.account",
-    # "allauth.socialaccount",
-    # "allauth.socialaccount.providers.github",
-    # "knox",
 ]
 
 INSTALLED_APPS += ("django_summernote",)
@@ -93,7 +89,7 @@ WSGI_APPLICATION = "ourblog.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.environ.get("NAME"),
+        "NAME": os.environ.get("DB_NAME"),
         "USER": os.environ.get("DB_USER"),
         "PASSWORD": os.environ.get("PASSWORD"),
         "HOST": "127.0.0.1",
@@ -138,6 +134,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+TAILWIND_APP_NAME = "theme"
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [

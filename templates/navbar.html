@@ -1,67 +1,80 @@
+{% load tailwind_tags %}
 {% load static %}
-<header class="tm-header" id="tm-header">
-  <div class="tm-header-wrapper">
-      <button class="navbar-toggler" type="button" aria-label="Toggle navigation">
-          <i class="fas fa-bars"></i>
-      </button>
-      <div class="tm-site-header">
-          <div class="mb-3 mx-auto tm-site-logo"><i class="fas fa-times fa-2x"></i></div>
-          <h1 class="text-center">Zee Blog</h1>
-      </div>
-      <nav class="tm-nav" id="tm-nav">
-          <ul>
-              <li class="tm-nav-item active"><a href="{% url "blog:articles" %}" class="tm-nav-link">
-                  <i class="fas fa-home"></i>
-                  Blog Home
-              </a></li>
-              {% if user.is_authenticated %}
 
-              <li class="tm-nav-item"><a href="{% url "blog:addarticle" %}" class="tm-nav-link">
-                  <i class="fas fa-pen"></i>
-                 Add Article
-              </a></li>
-              <li class="tm-nav-item"><a href="{% url "blog:dashboard" %}" class="tm-nav-link">
-                  <i class="fas fa-users"></i>
-                  Dashboard
-              </a></li>
-              <li class="tm-nav-item"><a href="{% url "blog:add_category" %}" class="tm-nav-link">
-                  <i class="far fa-comments"></i>
-                  Add Category
-              </a></li>
-              <li class="tm-nav-item"><a href="{% url "users:logout" %}" class="tm-nav-link">
-                  <i class="far fa-comments"></i>
-                  Logout
-              </a></li>
-              {% else %}
-              <li class="tm-nav-item"><a href="{% url "users:login" %}" class="tm-nav-link">
-                  <i class="fas fa-pen"></i>
-                 Login
-              </a></li>
-              <li class="tm-nav-item"><a href="{% url "users:register" %}" class="tm-nav-link">
-                  <i class="fas fa-pen"></i>
-                 Register
-              </a></li>
-              {% endif %}
-          </ul>
-      </nav>
-      <div class="tm-mb-65">
-          <a rel="nofollow" href="https://fb.com/" class="tm-social-link">
-              <i class="fab fa-facebook tm-social-icon"></i>
-          </a>
-          <a href="https://twitter.com/Herr_Zee" class="tm-social-link">
-              <i class="fab fa-twitter tm-social-icon"></i>
-          </a>
-          <a href="https://instagram.com/zayyadmusarov" class="tm-social-link">
-              <i class="fab fa-instagram tm-social-icon"></i>
-          </a>
-          <a href="https://linkedin.com" class="tm-social-link">
-              <i class="fab fa-linkedin tm-social-icon"></i>
-          </a>
-      </div>
-      <p class="tm-mb-80 pr-5 text-white">
-          Zee Blog is a blog website built using MVP technology of Django, HTML, CSS and JavaScript.
-      </p>
-  </div>
+{% tailwind_preload_css %}
+{% tailwind_css %}
+
+
+    <!-- Navbar -->
+<header class="bg-white shadow-lg">
+    <div class="container mx-auto flex justify-between items-center py-4">
+        <!-- Logo and Home -->
+        <div class="flex items-center space-x-8">
+            <a href="{% url 'blog:articles' %}">
+                <img src="{% static 'images/logo_resized.png' %}" alt="Logo" class="h-12 w-12 rounded-full">
+            </a>
+            <nav class="hidden md:flex space-x-6">
+                <a href="{% url 'blog:articles' %}" class="text-lg font-semibold text-gray-700 hover:text-indigo-600">Home</a>
+                <a href="{% url 'blog:dashboard' %}" class="text-lg font-semibold text-gray-700 hover:text-indigo-600">Dashboard</a>
+                <a href="{% url 'blog:unpub' %}" class="text-lg font-semibold text-gray-700 hover:text-indigo-600">Unpublished Dashboard</a>
+                <a href="{% url 'blog:addarticle' %}" class="text-lg font-semibold text-gray-700 hover:text-indigo-600">Add Article</a>
+            </nav>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="relative flex-1 mx-4">
+            <input type="text" placeholder="Search..." class="w-full py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+            <span class="absolute inset-y-0 right-4 flex items-center text-gray-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M18.76 10.23a8.5 8.5 0 11-17 0 8.5 8.5 0 0117 0z" />
+                </svg>
+            </span>
+        </div>
+
+        <!-- Auth Links -->
+        <div class="flex items-center space-x-6">
+            {% if user.is_authenticated %}
+                <!-- If the user is authenticated, show only the Logout button -->
+                <a href="{% url 'users:logout' %}" class="text-lg font-semibold text-gray-600 hover:text-indigo-600">Logout</a>
+            {% else %}
+                <!-- If not authenticated, show Login and Register -->
+                <a href="{% url 'users:login' %}" class="text-lg font-semibold text-gray-600 hover:text-indigo-600">Login</a>
+                <a href="{% url 'users:register' %}" class="text-lg font-semibold text-gray-600 hover:text-indigo-600">Register</a>
+            {% endif %}
+            <!-- Responsive Menu Icon for mobile -->
+            <div class="md:hidden flex items-center">
+                <button class="mobile-menu-button focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <nav class="mobile-menu hidden md:hidden bg-gray-50 p-4 shadow-lg">
+        <a href="{% url 'blog:articles' %}" class="block py-2 text-gray-700 font-semibold hover:text-indigo-600">Home</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'users:logout' %}" class="block py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition">Logout</a>
+        {% else %}
+            <a href="{% url 'users:login' %}" class="block py-2 text-gray-700 font-semibold hover:text-indigo-600">Login</a>
+            <a href="{% url 'users:register' %}" class="block py-2 text-gray-700 font-semibold hover:text-indigo-600">Register</a>
+        {% endif %}
+    </nav>
 </header>
 
+<br/>
+<br/>
+<br/>
+
+<!-- Optional JavaScript for the mobile menu toggle -->
+<script>
+    const mobileMenuButton = document.querySelector('.mobile-menu-button');
+    const mobileMenu = document.querySelector('.mobile-menu');
+
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+</script>
 

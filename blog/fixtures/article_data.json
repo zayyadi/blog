@@ -1,0 +1,162 @@
+[
+  {
+    "model": "blog.Article",
+    "pk": "1",
+    "fields": {
+      "title": "Protect or ago trade work.",
+      "author": 1,
+      "content": "Production hospital fish control price. Tend music attorney the eat head network.",
+      "image": "media/article_pics/default.png",
+      "publish": "2022-01-23T01:04:09.060107",
+      "status": "draft",
+      "slug": "admit-marriage-two",
+      "category": 2,
+      "likes": [],
+      "snippet": "Allow than bar concern finally why."
+    }
+  },
+  {
+    "model": "blog.Article",
+    "pk": "2",
+    "fields": {
+      "title": "Late indeed inside wall.",
+      "author": 1,
+      "content": "Myself responsibility cold matter side grow wall. Close local most act nature. Local soon as live.",
+      "image": "media/article_pics/default.png",
+      "publish": "2020-06-02T06:16:24.794596",
+      "status": "published",
+      "slug": "beautiful-civil",
+      "category": 2,
+      "likes": [],
+      "snippet": "Inside stop deep white organization choice."
+    }
+  },
+  {
+    "model": "blog.Article",
+    "pk": "3",
+    "fields": {
+      "title": "Benefit apply century.",
+      "author": 2,
+      "content": "Hear figure quality why two little try. You glass stage last. Mother national be stop share upon young.",
+      "image": "media/article_pics/default.png",
+      "publish": "2022-12-15T01:40:03.806895",
+      "status": "draft",
+      "slug": "single-various-some",
+      "category": 2,
+      "likes": [],
+      "snippet": "Detail modern message."
+    }
+  },
+  {
+    "model": "blog.Article",
+    "pk": "4",
+    "fields": {
+      "title": "Option weight social gun key industry another.",
+      "author": 2,
+      "content": "Employee determine growth be. College trip them story. Involve beautiful quality institution you whatever art.",
+      "image": "media/article_pics/default.png",
+      "publish": "2022-09-18T17:26:12.638689",
+      "status": "draft",
+      "slug": "type-rock-be",
+      "category": 2,
+      "likes": [],
+      "snippet": "Cost pull with yourself."
+    }
+  },
+  {
+    "model": "blog.Article",
+    "pk": "5",
+    "fields": {
+      "title": "Military teach bed agent reach probably bed.",
+      "author": 2,
+      "content": "Write edge west ask TV strong. Nor property get wear answer right model nothing. Success great wide thousand staff. Eat difficult difference always late voice back.",
+      "image": "media/article_pics/default.png",
+      "publish": "2020-04-07T02:58:51.625038",
+      "status": "published",
+      "slug": "pressure-end",
+      "category": 1,
+      "likes": [],
+      "snippet": "When of likely far edge care edge station."
+    }
+  },
+  {
+    "model": "blog.Article",
+    "pk": "6",
+    "fields": {
+      "title": "Condition discussion fast pass look.",
+      "author": 1,
+      "content": "Party reality design. Much town beautiful other start. Might five small country field anything short.",
+      "image": "media/article_pics/default.png",
+      "publish": "2023-09-21T09:11:08.326136",
+      "status": "draft",
+      "slug": "leave-difficult-cup",
+      "category": 2,
+      "likes": [],
+      "snippet": "Attorney become live expert tree cause into."
+    }
+  },
+  {
+    "model": "blog.Article",
+    "pk": "7",
+    "fields": {
+      "title": "About which actually heavy garden.",
+      "author": 2,
+      "content": "As smile shake force. Over alone build soldier all sing stuff. Force chair region.",
+      "image": "media/article_pics/default.png",
+      "publish": "2022-08-10T21:51:29.112593",
+      "status": "published",
+      "slug": "some-garden",
+      "category": 1,
+      "likes": [],
+      "snippet": "Program police special behavior."
+    }
+  },
+  {
+    "model": "blog.Article",
+    "pk": "8",
+    "fields": {
+      "title": "Decade actually movement we.",
+      "author": 1,
+      "content": "Back even face away. Center accept information player such. Firm two ask you build describe policy.",
+      "image": "media/article_pics/default.png",
+      "publish": "2022-06-24T20:02:01.874579",
+      "status": "published",
+      "slug": "last-fight-price",
+      "category": 1,
+      "likes": [],
+      "snippet": "Guess figure leg cause oil enter."
+    }
+  },
+  {
+    "model": "blog.Article",
+    "pk": "9",
+    "fields": {
+      "title": "Economic program indeed.",
+      "author": 1,
+      "content": "Near yourself government take paper.",
+      "image": "media/article_pics/default.png",
+      "publish": "2023-01-28T21:20:20.518079",
+      "status": "published",
+      "slug": "none-receive-sell",
+      "category": 1,
+      "likes": [],
+      "snippet": "Pay move chance treat."
+    }
+  },
+  {
+    "model": "blog.Article",
+    "pk": "10",
+    "fields": {
+      "title": "Coach foot civil pick.",
+      "author": 2,
+      "content": "Cause edge she where film thank. Training meet smile both understand. Live agreement staff fast.",
+      "image": "media/article_pics/default.png",
+      "publish": "2022-03-12T10:10:59.656933",
+      "status": "published",
+      "slug": "writer-hope-officer",
+      "category": 2,
+      "likes": [],
+      "snippet": "Room forward school marriage."
+    }
+  }
+]

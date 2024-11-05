@@ -33,7 +33,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.email
+        return self.first_name + " " + self.last_name
 
 
 class Profile(models.Model):
@@ -60,7 +60,7 @@ class Profile(models.Model):
     about = models.TextField(blank=True)
 
     def __str__(self):
-        return f"{self.user.username} Profile"
+        return f"{self.user.email} Profile"
 
     def save(self, *args, **kwargs):
 
@@ -73,7 +73,7 @@ class Profile(models.Model):
         super(Profile, self).save(*args, **kwargs)
 
 
-@receiver(post_save, sender=CustomUser)
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(
@@ -84,6 +84,6 @@ def create_profile(sender, instance, created, **kwargs):
         )
 
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def save_profile(sender, instance, **kwargs):
-    instance.profile.save()
+# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+# def save_profile(sender, instance, **kwargs):
+#     instance.profile.save()

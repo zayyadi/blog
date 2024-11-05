@@ -24,7 +24,7 @@ from django.utils.encoding import force_bytes
 
 class RegisterView(views.View):
     def get(self, request):
-        return render(request, "registration/register.html", {"form": SignUpForm()})
+        return render(request, "users/register.html", {"form": SignUpForm()})
 
     def post(self, request):
         form = SignUpForm(request.POST)
@@ -37,39 +37,18 @@ class RegisterView(views.View):
 
 
 class MyLoginView(LoginView):
+    template_name = "users/login.html"
+
     def get_success_url(self):
         redirect_url = self.request.GET.get("next")
         if redirect_url:
             return redirect_url
 
-        return reverse("payroll:index")
+        return reverse("blog:articles")
 
 
 def social(request):
     return render(request, "users/social.html")
-
-
-# @login_required
-# def profile(request):
-#     created = Profile.objects.get_or_create(user=request.user)
-#     if request.method == "POST":
-#         u_form = UserUpdateForm(request.POST, instance=request.user)
-#         p_form = ProfileUpdateForm(
-#             request.POST, request.FILES, instance=request.user.profile
-#         )
-#         if u_form.is_valid() and p_form.is_valid():
-#             u_form.save()
-#             p_form.save()
-#             messages.success(request, f"Your account has been updated!")
-#             return redirect("users:profile")
-
-#     else:
-#         u_form = UserUpdateForm(instance=request.user)
-#         p_form = ProfileUpdateForm(instance=request.user.profile)
-
-#     context = {"u_form": u_form, "p_form": p_form}
-
-#     return render(request, "users/profile.html", context)
 
 
 @login_required
@@ -140,7 +119,7 @@ def validate_username(request):
 
 
 class CustomPasswordResetView(PasswordResetView):
-    email_template_name = "registration/password_reset_email.html"
+    email_template_name = "users/password_reset_email.html"
     success_url = reverse_lazy("users:password_reset_done")
 
     def send_mail(
@@ -171,7 +150,7 @@ class CustomPasswordResetView(PasswordResetView):
             "users:password_reset_confirm", kwargs={"uidb64": uidb64, "token": token}
         )
         email_body = render_to_string(
-            "registration/password_reset_email.html",
+            "users/password_reset_email.html",
             {
                 "protocol": "http",  # or 'https' depending on your setup
                 "domain": "127.0.0.1",  # replace with your actual domain
@@ -199,14 +178,14 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
 
 def custom_password_reset_done(request):
     # Your custom password reset done view logic
-    return render(request, "registration/password_reset_done.html")
+    return render(request, "users/password_reset_done.html")
 
 
 def custom_password_reset_complete(request):
     # Your custom password reset complete view logic
-    return render(request, "registration/password_reset_complete.html")
+    return render(request, "users/password_reset_complete.html")
 
 
 def logout_view(request):
     logout(request)
-    return render(request, "registration/logout.html")
+    return render(request, "users/logout.html")

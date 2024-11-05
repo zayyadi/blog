@@ -1,15 +1,21 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 
 # from users.models import NewUser
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Count, Q
 from django.shortcuts import HttpResponseRedirect, get_object_or_404, redirect, render
 from django.template.defaultfilters import slugify
+from django.urls import reverse
 from taggit.models import Tag
 from .models import Article, Category
 
-from .forms import ArticleForm, CommentForm, CategoryForm
+from .forms import ApprovalForm, ArticleForm, CommentForm, CategoryForm
+
+
+def check_super(user):
+    return user.is_superuser
 
 
 @login_required
@@ -56,9 +62,13 @@ def articles(request, slug=None):
 
 @login_required
 def LikeView(request, slug):
-    article = get_object_or_404(Article, slug=slug)
-    article.likes.add(request.user)
-    return redirect("blog:detail", article.slug)
+    if request.user.is_authenticated:
+        article = get_object_or_404(Article, slug=slug)
+        article.likes.add(request.user)
+        return redirect("blog:detail", article.slug)
+    else:
+        messages.error(request, "You must be logged in to like posts.")
+        return redirect(reverse("blog:detail", args=[slug]))
 
 
 def about(request):
@@ -92,12 +102,60 @@ def addArticle(request):
     return render(request, "blog/addarticle.html", context)
 
 
-def detail(request, post):
-    # article = Article.objects.filter(id = id).first()
-    article = get_object_or_404(Article, slug=post, status="published")
-    allcomments = article.comments.filter(active=True)
-    page = request.GET.get("page", 1)
+# def detail(request, post):
+#     # article = Article.objects.filter(id = id).first()
+#     article = get_object_or_404(Article, slug=post, status="published")
+#     allcomments = article.comments.filter(active=True)
+#     page = request.GET.get("page", 1)
 
+#     paginator = Paginator(allcomments, 10)
+#     try:
+#         comments = paginator.page(page)
+#     except PageNotAnInteger:
+#         comments = paginator.page(1)
+#     except EmptyPage:
+#         comments = paginator.page(paginator.num_pages)
+#     article_tags = Article.tags.values_list("id", flat=True)
+#     similar_posts = Article.objects.filter(tags__in=article_tags).exclude(id=article.id)
+#     similar_posts = similar_posts.annotate(same_tags=Count("tags")).order_by(
+#         "-same_tags", "-publish"
+#     )[:3]
+
+#     comments = article.comments.filter(active=True)
+
+#     user_comment = None
+
+#     if request.method == "POST":
+#         comment_form = CommentForm(request.POST)
+#         if comment_form.is_valid():
+#             user_comment = comment_form.save(commit=False)
+#             user_comment.post = article
+#             user_comment.save()
+#             return HttpResponseRedirect(request.path_info)
+#     else:
+#         comment_form = CommentForm()
+
+#     context = {
+#         "comments": user_comment,
+#         "comments": comments,
+#         "comment_form": comment_form,
+#         "allcomments": allcomments,
+#         "article": article,
+#         "similar_posts": similar_posts,
+#     }
+
+#     return render(request, "blog/detail.html", context)
+
+
+def detail(request, post):
+    # Retrieve the article by slug and ensure it's published
+    article = get_object_or_404(Article, slug=post, status="published")
+    allcomments = article.comments.filter(
+        active=True, parent=None
+    )  # Only top-level comments for pagination
+
+    # Set up pagination for top-level comments
+    page = request.GET.get("page", 1)
     paginator = Paginator(allcomments, 10)
     try:
         comments = paginator.page(page)
@@ -105,17 +163,17 @@ def detail(request, post):
         comments = paginator.page(1)
     except EmptyPage:
         comments = paginator.page(paginator.num_pages)
-    article_tags = Article.tags.values_list("id", flat=True)
+
+    # Get related posts based on shared tags
+    article_tags = article.tags.values_list("id", flat=True)
     similar_posts = Article.objects.filter(tags__in=article_tags).exclude(id=article.id)
     similar_posts = similar_posts.annotate(same_tags=Count("tags")).order_by(
         "-same_tags", "-publish"
     )[:3]
 
-    comments = article.comments.filter(active=True)
-
     user_comment = None
-
     if request.method == "POST":
+        # Handle comment form submission
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             user_comment = comment_form.save(commit=False)
@@ -126,15 +184,34 @@ def detail(request, post):
         comment_form = CommentForm()
 
     context = {
-        "comments": user_comment,
-        "comments": comments,
-        "comment_form": comment_form,
+        "comments": user_comment,  # Paginated top-level comments
+        "comments": comments,  # Paginated top-level comments
         "allcomments": allcomments,
-        "article": article,
-        "similar_posts": similar_posts,
+        "comment_form": comment_form,  # Form for new comments
+        "article": article,  # Current article details
+        "similar_posts": similar_posts,  # Articles with similar tags
     }
 
     return render(request, "blog/detail.html", context)
+
+
+@user_passes_test(check_super)
+@login_required
+def list_unpublished(request):
+    unpub = Article.unpublished.all()
+    return render(request, "blog/list_unpub.html", {"unpub": unpub})
+
+
+@user_passes_test(check_super)
+@login_required
+def approve_post(request, slug):
+    post = get_object_or_404(Article, slug=slug)
+    form = ApprovalForm(request.POST or None, request.FILES or None, instance=post)
+    if form.is_valid():
+        post = form.save()
+        messages.success(request, "Article has been Updated")
+        return redirect("blog:dashboard")
+    return render(request, "blog/approve.html", {"form": form})
 
 
 @login_required
@@ -172,7 +249,7 @@ def tagged(request, slug):
         "common_tags": common_tags,
         "article": article,
     }
-    return render(request, "article.html", context)
+    return render(request, "blog/tag_list.html", context)
 
 
 def category(request, category_slug):

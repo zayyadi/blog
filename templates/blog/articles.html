@@ -5,16 +5,7 @@
 <div class="container-fluid">
   <main class="tm-main">
       <!-- Search form -->
-      <div class="row tm-row">
-          <div class="col-12">
-              <form method="GET" action="search/" class="form-inline tm-mb-80 tm-search-form">                
-                  <input class="form-control tm-search-input" name="query" type="text" placeholder="Search..." aria-label="Search">
-                  <button class="tm-search-button" type="submit">
-                      <i class="fas fa-search tm-search-icon" aria-hidden="true"></i>
-                  </button>
-              </form>
-          </div>
-      </div>
+
 
       <div class="row tm-row">
         {% for post in articles %}
@@ -50,30 +41,3 @@
 </main>
     <h3 class="text-center">{% include 'pagination.html' with page=articles %}</h3>
 {% endblock %}
-{% comment %} <section class="article">
-        <div class="container">
-          {% for post in articles %}
-          <div class="img-position">
-            <a class="text-dark" href="{{post.get_absolute_url}}">
-              <div class="card-text-white-bg-primary-mb-3" style="max-width: 18rem;">
-                <img class="card-img-top" src="{{post.image.url}}" alt="{{ post.title }}">
-                <div class="card-body">
-                  <h2 style="font-size:18px;font-weight:bold">{{post.title|truncatechars:20}}</h2></div>
-                  <div class="card-text"><p>{{post.snippet|truncatechars:50}}</p></div> 
-                  <div class="d-flex justify-content-between align-items-center">
-                    <small class="text-muted">{{ post.publish.date }}</small>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-  </section>
-    <section class="pagination">
-      <h3 class="text-center">{% include 'pagination.html' with page=articles %}</h3>
-    </section>
-  
-{% endblock %} {% endcomment %}
